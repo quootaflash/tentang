@@ -3,15 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Menu Operator - Rekrutmen</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  <title>Rekrutmen Operator</title>
 
+  <!-- PWA Manifest (Inline - Aman untuk sandbox) -->
+  <link rel="manifest" href="data:application/manifest+json,{
+    %22name%22:%22Rekrutmen%20Operator%22,
+    %22short_name%22:%22Rekrutmen%22,
+    %22description%22:%22Menu%20Operator%20Rekrutmen%22,
+    %22start_url%22:%22.%22,
+    %22display%22:%22standalone%22,
+    %22background_color%22:%22%23f8f9fa%22,
+    %22theme_color%22:%22%232980b9%22,
+    %22icons%22:[
+      {%22src%22:%22https://via.placeholder.com/192x192/2980b9/ffffff?text=R%22,%22sizes%22:%22192x192%22,%22type%22:%22image/png%22},
+      {%22src%22:%22https://via.placeholder.com/512x512/2980b9/ffffff?text=R%22,%22sizes%22:%22512x512%22,%22type%22:%22image/png%22}
+    ]
+  }">
+
+  <meta name="theme-color" content="#2980b9">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
       background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
@@ -20,12 +36,11 @@
       padding: 20px 15px;
     }
 
-    .container {
-      max-width: 440px;
-      margin: 0 auto;
+    .container { 
+      max-width: 440px; 
+      margin: 0 auto; 
     }
 
-    /* Header */
     header {
       display: flex;
       align-items: center;
@@ -93,7 +108,7 @@
       height: 148px;
     }
 
-    .menu-item:hover {
+    .menu-item:hover, .menu-item:active {
       transform: translateY(-8px);
       box-shadow: 0 16px 32px rgba(52, 152, 219, 0.20);
     }
@@ -104,7 +119,7 @@
       transition: transform 0.35s ease;
     }
 
-    .menu-item:hover i {
+    .menu-item:hover i, .menu-item:active i {
       transform: scale(1.18);
     }
 
@@ -115,7 +130,6 @@
       line-height: 1.35;
     }
 
-    /* Warna ikon */
     .ats i      { color: #2980b9; }
     .lamaran i  { color: #27ae60; }
     .whatsapp i { color: #25D366; }
@@ -131,8 +145,6 @@
 <body>
 
   <div class="container">
-    
-    <!-- Header -->
     <header>
       <div class="logo-container">
         <div class="logo">R</div>
@@ -141,12 +153,10 @@
           <p>Operator</p>
         </div>
       </div>
-      
       <div class="datetime" id="datetime"></div>
     </header>
 
     <div class="menu-grid">
-
       <a href="https://45.dunnak.com" target="_blank" class="menu-item ats">
         <i class="fas fa-briefcase"></i>
         <span>ATS</span>
@@ -167,12 +177,10 @@
         <span>Riwayat</span>
       </a>
 
-      <!-- Pintasan WhatsApp (langsung ke aplikasi) -->
       <a href="https://wa.me/628xxxxxxxxxx" target="_blank" class="menu-item whatsapp">
         <i class="fab fa-whatsapp"></i>
         <span>WhatsApp</span>
       </a>
-
     </div>
 
     <div class="footer">
@@ -182,16 +190,15 @@
   </div>
 
   <script>
+    // Update Tanggal & Waktu Real-time
     function updateDateTime() {
       const now = new Date();
-      
       const dateOptions = { 
         weekday: 'long', 
         day: 'numeric', 
         month: 'long', 
         year: 'numeric' 
       };
-      
       const dateStr = now.toLocaleDateString('id-ID', dateOptions);
       const timeStr = now.toLocaleTimeString('id-ID', { 
         hour: '2-digit', 
@@ -206,7 +213,41 @@
 
     setInterval(updateDateTime, 1000);
     updateDateTime();
-  </script>
 
+    // Service Worker hanya dijalankan jika bukan di dalam iframe/sandbox
+    function isInIframe() {
+      try {
+        return window.self !== window.top;
+      } catch (e) {
+        return true;
+      }
+    }
+
+    if ('serviceWorker' in navigator && !isInIframe()) {
+      const swCode = `
+        const CACHE_NAME = 'rekrutmen-operator-v1';
+        const urlsToCache = ['./', 'index.html'];
+
+        self.addEventListener('install', event => {
+          event.waitUntil(
+            caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+          );
+        });
+
+        self.addEventListener('fetch', event => {
+          event.respondWith(
+            caches.match(event.request).then(response => response || fetch(event.request))
+          );
+        });
+      `;
+
+      const blob = new Blob([swCode], { type: 'application/javascript' });
+      const swUrl = URL.createObjectURL(blob);
+
+      navigator.serviceWorker.register(swUrl)
+        .then(() => console.log('✅ PWA Service Worker aktif'))
+        .catch(err => console.log('Service Worker gagal:', err));
+    }
+  </script>
 </body>
 </html>
