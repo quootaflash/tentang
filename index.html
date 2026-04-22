@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>CVPRO Tools</title>
+  <title>CVPRO Tools Pro</title>
 
   <!-- Meta PWA -->
   <meta name="theme-color" content="#2563EB">
@@ -12,10 +12,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="CVPRO">
   
-  <!-- Icon PWA Inline SVG -->
   <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%232563EB'/><text x='50' y='68' font-size='45' font-family='sans-serif' font-weight='800' fill='white' text-anchor='middle'>CP</text></svg>">
-
-  <!-- Font Awesome & Google Fonts -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 
@@ -29,8 +26,6 @@
       --text-muted: #64748B;
       --danger: #EF4444;
       --success: #10B981;
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
-      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05);
       --safe-area-bottom: env(safe-area-inset-bottom, 20px);
       --safe-area-top: env(safe-area-inset-top, 20px);
     }
@@ -47,459 +42,422 @@
       flex-direction: column;
     }
 
-    /* --- VIEW PAGES --- */
-    .page {
-      display: none; /* Semua halaman disembunyikan default */
-      flex: 1;
-      overflow-y: auto;
-      padding: calc(var(--safe-area-top) + 16px) 16px calc(80px + var(--safe-area-bottom)) 16px;
-      animation: fadeIn 0.3s ease;
-    }
-    
+    /* --- PAGES --- */
+    .page { display: none; flex: 1; overflow-y: auto; padding: calc(var(--safe-area-top) + 16px) 16px calc(80px + var(--safe-area-bottom)) 16px; animation: fadeIn 0.3s ease; }
     .page.active { display: block; }
-
     @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
     .container { max-width: 600px; margin: 0 auto; }
 
-    /* --- HEADER STICKY --- */
+    /* --- HEADER --- */
     header {
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      padding: 16px;
-      border-radius: 16px;
-      box-shadow: var(--shadow-sm);
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 24px; position: sticky; top: 0; z-index: 50;
+      background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      padding: 16px; border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: sticky; top: 0; z-index: 50;
     }
-
     .brand { display: flex; align-items: center; gap: 12px; }
-    .logo {
-      width: 44px; height: 44px; background: var(--primary); border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      color: white; font-size: 20px; font-weight: 800;
-      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+    .logo { width: 40px; height: 40px; background: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; font-weight: 800; }
+    .brand-info h1 { font-size: 16px; font-weight: 800; }
+    .brand-info p { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
+
+    /* --- EDIT BUTTON --- */
+    .btn-edit {
+      background: transparent; border: none; color: var(--primary); font-weight: 600; font-size: 13px; cursor: pointer;
     }
-    .brand-info h1 { font-size: 16px; font-weight: 800; letter-spacing: -0.5px; }
-    .brand-info p { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
 
-    .datetime { text-align: right; }
-    .date { font-size: 10px; font-weight: 600; color: var(--text-muted); }
-    .time { font-size: 14px; font-weight: 700; color: var(--primary); }
+    /* --- GROUPS --- */
+    .group-title { font-size: 12px; font-weight: 700; color: var(--text-muted); margin: 20px 0 10px 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .group-title:first-child { margin-top: 0; }
 
-    /* --- WELCOME & GREETING --- */
-    .welcome-banner { margin-bottom: 24px; }
-    .greeting { font-size: 26px; font-weight: 800; color: var(--text-main); margin-bottom: 4px; line-height: 1.2; }
-    .sub-greeting { font-size: 14px; color: var(--text-muted); }
-
-    /* --- MENU GRID (HOME) --- */
-    .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-
-    .menu-item {
-      background: var(--bg-card); border-radius: 16px; padding: 20px 10px;
-      text-decoration: none; color: var(--text-main);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 10px; box-shadow: var(--shadow-sm);
-      transition: transform 0.1s, background 0.2s; position: relative; overflow: hidden;
-      cursor: pointer;
+    /* --- SWIPE CARD (Advanced UI) --- */
+    .swipe-wrapper {
+      position: relative; overflow: hidden; margin-bottom: 12px; border-radius: 16px;
+      touch-action: pan-y; /* Allow vertical scroll */
     }
-    .menu-item:active { transform: scale(0.95); background: #F1F5F9; }
+    
+    .swipe-bg {
+      position: absolute; top: 0; right: 0; bottom: 0; width: 100px;
+      background: var(--danger); display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 20px; z-index: 1; transform: translateX(100%);
+      transition: transform 0.2s ease;
+    }
 
-    .icon-box { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; background: #F8FAFC; }
-    .menu-label { font-size: 11px; font-weight: 700; text-align: center; line-height: 1.2; }
-
-    /* Colors */
-    .ats i { color: #2563EB; } .lamaran i { color: #059669; }
-    .resign i { color: #D97706; } .creative1 i { color: #E11D48; }
-    .creative2 i { color: #7C3AED; } .creative3 i { color: #0891B2; }
-    .entry i { color: #4B5563; }
-
-    /* --- HISTORY / NOTIFIKASI PAGE --- */
     .history-card {
-      background: white; border-radius: 16px; padding: 16px; margin-bottom: 12px;
-      box-shadow: var(--shadow-sm); display: flex; align-items: center; justify-content: space-between;
+      background: var(--bg-card); padding: 16px; display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: relative; z-index: 2;
+      transform: translateX(0); transition: transform 0.2s ease, background 0.2s;
     }
+
     .history-info { display: flex; align-items: center; gap: 12px; }
-    .history-icon { 
-      width: 40px; height: 40px; border-radius: 10px; background: #EFF6FF; 
-      display: flex; align-items: center; justify-content: center; color: var(--primary);
-    }
-    .history-text h4 { font-size: 14px; font-weight: 700; }
-    .history-text p { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-    .btn-resume {
-      background: var(--primary); color: white; border: none; padding: 8px 16px; 
-      border-radius: 8px; font-size: 12px; font-weight: 600; text-decoration: none;
-    }
+    .history-icon { width: 38px; height: 38px; border-radius: 10px; background: #EFF6FF; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 16px; }
+    .history-text h4 { font-size: 14px; font-weight: 700; color: var(--text-main); }
+    .history-text p { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
 
-    .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); }
-    .empty-state i { font-size: 48px; margin-bottom: 16px; opacity: 0.3; }
+    /* State when swiped */
+    .swipe-wrapper.swiped .swipe-bg { transform: translateX(0); }
+    .swipe-wrapper.swiped .history-card { transform: translateX(-80px); }
 
-    /* --- BOTTOM NAVIGATION --- */
+    /* --- MODAL CUSTOM --- */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 999;
+      display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s;
+    }
+    .modal-overlay.show { display: flex; opacity: 1; }
+    .modal-box {
+      background: white; width: 85%; max-width: 320px; border-radius: 20px; padding: 24px;
+      text-align: center; transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .modal-overlay.show .modal-box { transform: scale(1); }
+    .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    .modal-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+    .modal-actions { display: flex; gap: 10px; }
+    .btn-modal { flex: 1; padding: 12px; border-radius: 12px; font-weight: 600; border: none; font-size: 14px; }
+    .btn-cancel { background: #F1F5F9; color: var(--text-muted); }
+    .btn-confirm { background: var(--danger); color: white; }
+
+    /* --- MENU GRID --- */
+    .menu-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .menu-item {
+      background: var(--bg-card); border-radius: 16px; padding: 20px 10px; text-decoration: none; color: var(--text-main);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: transform 0.1s; cursor: pointer;
+    }
+    .menu-item:active { transform: scale(0.95); }
+    .icon-box { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; background: #F8FAFC; }
+    .menu-label { font-size: 11px; font-weight: 700; text-align: center; }
+    
+    .ats i { color: #2563EB; } .lamaran i { color: #059669; } .resign i { color: #D97706; } 
+    .creative1 i { color: #E11D48; } .creative2 i { color: #7C3AED; } .creative3 i { color: #0891B2; } .entry i { color: #4B5563; }
+
+    /* --- BOTTOM NAV --- */
     .bottom-nav {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: white; height: calc(60px + var(--safe-area-bottom));
-      padding-bottom: var(--safe-area-bottom);
-      display: flex; justify-content: space-around; align-items: center;
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.05); z-index: 100;
-      border-top-left-radius: 20px; border-top-right-radius: 20px;
+      position: fixed; bottom: 0; left: 0; right: 0; background: white; height: calc(60px + var(--safe-area-bottom));
+      padding-bottom: var(--safe-area-bottom); display: flex; justify-content: space-around; align-items: center;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.05); z-index: 100; border-top-left-radius: 20px; border-top-right-radius: 20px;
     }
-
-    .nav-item {
-      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      text-decoration: none; color: #94A3B8; font-size: 10px; font-weight: 600;
-      transition: color 0.2s; height: 100%; position: relative;
-    }
-
+    .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-decoration: none; color: #94A3B8; font-size: 10px; font-weight: 600; height: 100%; position: relative; }
     .nav-item i { font-size: 20px; margin-bottom: 4px; }
     .nav-item.active { color: var(--primary); }
-    .nav-item:active { color: var(--primary-dark); }
-
-    /* Notification Badge */
-    .badge {
-      position: absolute; top: 8px; right: 25%; width: 10px; height: 10px;
-      background: var(--danger); border: 2px solid white; border-radius: 50%;
-      display: none;
-    }
+    .badge { position: absolute; top: 8px; right: 25%; width: 10px; height: 10px; background: var(--danger); border: 2px solid white; border-radius: 50%; display: none; }
     .badge.show { display: block; }
 
-    /* --- POPUP INSTALL --- */
-    .install-banner {
-      position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
-      background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(8px);
-      color: white; padding: 12px 20px; border-radius: 24px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-      display: flex; align-items: center; gap: 12px; z-index: 200;
-      opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); max-width: 90%;
+    /* --- SETTINGS --- */
+    .setting-row {
+      background: white; padding: 16px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
     }
-    .install-banner.show { transform: translateX(-50%) translateY(0); opacity: 1; pointer-events: auto; }
-    .install-btn { background: white; color: #2563EB; border: none; padding: 6px 14px; border-radius: 12px; font-weight: 700; font-size: 12px; cursor: pointer; }
-    .dismiss-btn { background: transparent; border: none; color: #94A3B8; margin-left: 5px; cursor: pointer; }
+    .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+    .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+    input:checked + .slider { background-color: var(--primary); }
+    input:checked + .slider:before { transform: translateX(20px); }
 
   </style>
 </head>
 <body>
 
-  <!-- HALAMAN 1: HOME -->
+  <!-- PAGE: HOME -->
   <div id="view-home" class="page active">
     <div class="container">
       <header>
-        <div class="brand">
-          <div class="logo">CP</div>
-          <div class="brand-info">
-            <h1>CVPRO</h1>
-            <p>Operator Tools</p>
-          </div>
-        </div>
-        <div class="datetime">
-          <div class="date" id="date">Loading...</div>
-          <div class="time" id="time">--:--</div>
+        <div class="brand"><div class="logo">CP</div><div class="brand-info"><h1>CVPRO</h1><p>Operator Tools</p></div></div>
+        <div class="datetime" style="text-align:right">
+          <div class="date" id="date">Loading...</div><div class="time" id="time">--:--</div>
         </div>
       </header>
-
-      <div class="welcome-banner">
-        <div class="greeting" id="greetingText">Selamat Pagi,</div>
-        <div class="sub-greeting">Pilih alat kerja untuk memulai proyek.</div>
-      </div>
-
-      <!-- Grid Menu -->
       <div class="menu-grid">
-        <div class="menu-item ats" onclick="openTool('ATS', 'https://45.dunnak.com')">
-          <div class="icon-box"><i class="fas fa-briefcase"></i></div>
-          <span class="menu-label">ATS</span>
-        </div>
-
-        <div class="menu-item lamaran" onclick="openTool('LAMARAN', 'https://46.dunnak.com')">
-          <div class="icon-box"><i class="fas fa-file-alt"></i></div>
-          <span class="menu-label">LAMARAN</span>
-        </div>
-
-        <div class="menu-item resign" onclick="openTool('RESIGN', 'https://47.dunnak.com')">
-          <div class="icon-box"><i class="fa-solid fa-envelope"></i></div>
-          <span class="menu-label">RESIGN</span>
-        </div>
-
-        <div class="menu-item creative1" onclick="openTool('CREATIV 1', 'https://51.dunnak.com')">
-          <div class="icon-box"><i class="fas fa-brush"></i></div>
-          <span class="menu-label">CREATIV 1</span>
-        </div>
-
-        <div class="menu-item creative2" onclick="openTool('CREATIVE 2', 'https://52.dunnak.com')">
-          <div class="icon-box"><i class="fas fa-brush"></i></div>
-          <span class="menu-label">CREATIVE 2</span>
-        </div>
-
-        <div class="menu-item creative3" onclick="openTool('CREATIVE 3', 'https://53.dunnak.com')">
-          <div class="icon-box"><i class="fas fa-brush"></i></div>
-          <span class="menu-label">CREATIVE 3</span>
-        </div>
-
-        <div class="menu-item entry" onclick="openTool('ATS ENTRY', 'https://school.dunnak.com')">
-          <div class="icon-box"><i class="fas fa-camera"></i></div>
-          <span class="menu-label">ATS ENTRY</span>
-        </div>
+        <!-- Items rendered dynamically or static below -->
+        <div class="menu-item ats" onclick="openTool('ATS', 'https://45.dunnak.com')"><div class="icon-box"><i class="fas fa-briefcase"></i></div><span class="menu-label">ATS</span></div>
+        <div class="menu-item lamaran" onclick="openTool('LAMARAN', 'https://46.dunnak.com')"><div class="icon-box"><i class="fas fa-file-alt"></i></div><span class="menu-label">LAMARAN</span></div>
+        <div class="menu-item resign" onclick="openTool('RESIGN', 'https://47.dunnak.com')"><div class="icon-box"><i class="fa-solid fa-envelope"></i></div><span class="menu-label">RESIGN</span></div>
+        <div class="menu-item creative1" onclick="openTool('CREATIV 1', 'https://51.dunnak.com')"><div class="icon-box"><i class="fas fa-brush"></i></div><span class="menu-label">CREATIV 1</span></div>
+        <div class="menu-item creative2" onclick="openTool('CREATIVE 2', 'https://52.dunnak.com')"><div class="icon-box"><i class="fas fa-brush"></i></div><span class="menu-label">CREATIVE 2</span></div>
+        <div class="menu-item creative3" onclick="openTool('CREATIVE 3', 'https://53.dunnak.com')"><div class="icon-box"><i class="fas fa-brush"></i></div><span class="menu-label">CREATIVE 3</span></div>
+        <div class="menu-item entry" onclick="openTool('ATS ENTRY', 'https://school.dunnak.com')"><div class="icon-box"><i class="fas fa-camera"></i></div><span class="menu-label">ATS ENTRY</span></div>
       </div>
     </div>
   </div>
 
-  <!-- HALAMAN 2: HISTORY / NOTIFIKASI -->
+  <!-- PAGE: HISTORY -->
   <div id="view-history" class="page">
     <div class="container">
       <header>
-        <div class="brand">
-          <div class="logo">CP</div>
-          <div class="brand-info">
-            <h1>History</h1>
-            <p>Project Tersimpan</p>
-          </div>
-        </div>
+        <div class="brand"><div class="logo">CP</div><div class="brand-info"><h1>History</h1><p>Project Tersimpan</p></div></div>
+        <button class="btn-edit" onclick="confirmClearAll()">Hapus Semua</button>
       </header>
-
-      <div class="welcome-banner">
-        <div class="greeting">Lanjutkan Kerja?</div>
-        <div class="sub-greeting">Berikut adalah tools yang terakhir Anda buka.</div>
-      </div>
-
-      <div id="history-list">
-        <!-- List History akan di-render lewat JavaScript -->
-      </div>
+      <div id="history-list"></div>
     </div>
   </div>
 
-  <!-- HALAMAN 3: AKUN (Placeholder Clean) -->
+  <!-- PAGE: ACCOUNT / SETTINGS -->
   <div id="view-account" class="page">
     <div class="container">
       <header>
-        <div class="brand">
-          <div class="logo">CP</div>
-          <div class="brand-info">
-            <h1>Akun</h1>
-            <p>Pengaturan</p>
-          </div>
-        </div>
+        <div class="brand"><div class="logo">CP</div><div class="brand-info"><h1>Pengaturan</h1><p>Aplikasi</p></div></div>
       </header>
-
-      <div class="welcome-banner">
-        <div class="greeting">Pengguna Operator</div>
-        <div class="sub-greeting">ID: #CVPRO-2026</div>
+      
+      <div class="setting-row">
+        <div>
+          <h4 style="font-size:14px; font-weight:700;">Auto-Clean History</h4>
+          <p style="font-size:11px; color:var(--text-muted);">Hapus history otomatis > 7 hari</p>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="autoCleanToggle" checked onchange="toggleAutoClean()">
+          <span class="slider"></span>
+        </label>
       </div>
 
-      <div class="menu-grid" style="grid-template-columns: 1fr;">
-        <div class="menu-item" onclick="clearHistory()" style="margin-bottom: 20px;">
-          <div class="icon-box" style="background:#FEF2F2; color:#EF4444;"><i class="fas fa-trash"></i></div>
-          <span class="menu-label">Hapus Semua History</span>
+      <div class="setting-row" style="margin-top:20px; background:#FEF2F2;" onclick="confirmClearAll()">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <i class="fas fa-trash" style="color:var(--danger);"></i>
+          <span style="font-weight:600; font-size:14px; color:var(--danger);">Reset Semua Data</span>
         </div>
+      </div>
+      
+      <p style="text-align:center; margin-top:30px; font-size:11px; color:#94A3B8;">CVPRO Tools v2.0 Pro</p>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <a href="#" class="nav-item active" onclick="switchPage('home', this)"><i class="fas fa-home"></i><span>Beranda</span></a>
+    <a href="#" class="nav-item" onclick="switchPage('history', this)"><div class="badge" id="notif-badge"></div><i class="fas fa-history"></i><span>History</span></a>
+    <a href="#" class="nav-item" onclick="switchPage('account', this)"><i class="fas fa-cog"></i><span>Setelan</span></a>
+  </nav>
+
+  <!-- CUSTOM MODAL CONFIRM -->
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal-box">
+      <div style="font-size:40px; color:var(--danger); margin-bottom:15px;"><i class="fas fa-exclamation-circle"></i></div>
+      <div class="modal-title" id="modalTitle">Hapus History?</div>
+      <div class="modal-desc" id="modalDesc">Tindakan ini tidak dapat dibatalkan.</div>
+      <div class="modal-actions">
+        <button class="btn-modal btn-cancel" onclick="closeModal()">Batal</button>
+        <button class="btn-modal btn-confirm" id="modalBtnAction">Hapus</button>
       </div>
     </div>
   </div>
 
-  <!-- BOTTOM NAVIGATION -->
-  <nav class="bottom-nav">
-    <a href="#" class="nav-item active" onclick="switchPage('home', this)">
-      <i class="fas fa-home"></i>
-      <span>Beranda</span>
-    </a>
-    <a href="#" class="nav-item" onclick="switchPage('history', this)">
-      <div class="badge" id="notif-badge"></div>
-      <i class="fas fa-history"></i>
-      <span>History</span>
-    </a>
-    <a href="#" class="nav-item" onclick="switchPage('account', this)">
-      <i class="fas fa-user"></i>
-      <span>Akun</span>
-    </a>
-  </nav>
-
-  <!-- BANNER INSTALL -->
-  <div class="install-banner" id="installBanner">
-    <i class="fas fa-cloud-download-alt"></i>
-    <div style="font-size:13px;">Install <b>CVPRO App</b></div>
-    <button class="install-btn" id="installBtn">Pasang</button>
-    <button class="dismiss-btn" id="dismissBtn"><i class="fas fa-times"></i></button>
-  </div>
-
+  <!-- PWA & UTILS -->
   <script>
     // ==========================================
-    // 1. LOGIKA WAKTU & SAPAAN
+    // 1. CORE LOGIC: HISTORY & SWIPE
     // ==========================================
-    function updateGreetingAndTime() {
-      const now = new Date();
-      const hour = now.getHours();
-      
-      let greeting = "Selamat Pagi";
-      if (hour >= 4 && hour < 10) greeting = "Selamat Pagi";
-      else if (hour >= 10 && hour < 15) greeting = "Selamat Siang";
-      else if (hour >= 15 && hour < 18) greeting = "Selamat Sore";
-      else greeting = "Selamat Malam";
+    const STORAGE_PREFIX = 'cvpro_hist_';
+    let pendingDeleteKey = null;
 
-      document.getElementById('greetingText').innerText = greeting + ",";
-      document.getElementById('date').textContent = now.toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short' });
-      document.getElementById('time').textContent = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', hour12: false });
-    }
-    setInterval(updateGreetingAndTime, 1000);
-    updateGreetingAndTime();
-
-
-    // ==========================================
-    // 2. SISTEM HISTORY & NOTIFIKASI (LOCALSTORAGE)
-    // ==========================================
-    
-    // Fungsi saat user membuka Tool
+    // --- SAVE TOOL (When Clicked) ---
     function openTool(toolName, url) {
-      // Simpan ke LocalStorage sebagai history terbaru
-      const historyData = {
-        name: toolName,
-        url: url,
-        timestamp: new Date().getTime()
-      };
-
-      // Kita simpan di key spesifik berdasarkan nama tool agar tidak duplikat
-      localStorage.setItem('cvpro_last_' + toolName.replace(/\s/g, ''), JSON.stringify(historyData));
-
-      // Update badge
+      const data = { name: toolName, url: url, ts: Date.now() };
+      localStorage.setItem(STORAGE_PREFIX + toolName.replace(/\s/g, ''), JSON.stringify(data));
       checkHistoryCount();
-
-      // Buka URL
       window.open(url, '_blank');
     }
 
-    // Fungsi Cek Jumlah History untuk Badge
-    function checkHistoryCount() {
-      const keys = Object.keys(localStorage);
-      let count = 0;
-      keys.forEach(key => {
-        if (key.startsWith('cvpro_last_')) {
-          count++;
-        }
-      });
+    // --- AUTO CLEAN LOGIC ---
+    function runAutoClean() {
+      if (!localStorage.getItem('cvpro_autoclean')) return; // If disabled
 
-      const badge = document.getElementById('notif-badge');
-      if (count > 0) {
-        badge.classList.add('show');
-      } else {
-        badge.classList.remove('show');
-      }
-    }
+      const oneWeek = 7 * 24 * 60 * 60 * 1000;
+      const now = Date.now();
+      let cleaned = false;
 
-    // Fungsi Render Halaman History
-    function renderHistory() {
-      const listContainer = document.getElementById('history-list');
-      listContainer.innerHTML = ''; // Kosongkan list
-
-      const keys = Object.keys(localStorage);
-      let historyItems = [];
-
-      // Ambil data history dari LocalStorage
-      keys.forEach(key => {
-        if (key.startsWith('cvpro_last_')) {
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith(STORAGE_PREFIX)) {
           try {
-            const data = JSON.parse(localStorage.getItem(key));
-            historyItems.push(data);
-          } catch (e) { console.log('Data korup'); }
+            const item = JSON.parse(localStorage.getItem(key));
+            if (now - item.ts > oneWeek) {
+              localStorage.removeItem(key);
+              cleaned = true;
+            }
+          } catch(e){}
         }
       });
+      if(cleaned) console.log("Auto-Clean executed");
+    }
 
-      // Sortir berdasarkan waktu terbaru
-      historyItems.sort((a, b) => b.timestamp - a.timestamp);
+    function toggleAutoClean() {
+      const isChecked = document.getElementById('autoCleanToggle').checked;
+      if(isChecked) localStorage.setItem('cvpro_autoclean', 'true');
+      else localStorage.removeItem('cvpro_autoclean');
+    }
 
-      // Tampilkan ke UI
-      if (historyItems.length === 0) {
-        listContainer.innerHTML = `
-          <div class="empty-state">
-            <i class="fas fa-clipboard-list"></i>
-            <p>Belum ada proyek tersimpan.<br>Buka salah satu tools untuk memulai history.</p>
-          </div>
-        `;
-      } else {
-        historyItems.forEach(item => {
-          const date = new Date(item.timestamp).toLocaleDateString('id-ID', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
-          
-          const card = document.createElement('div');
-          card.className = 'history-card';
-          card.innerHTML = `
-            <div class="history-info">
-              <div class="history-icon"><i class="fas fa-folder-open"></i></div>
-              <div class="history-text">
-                <h4>${item.name}</h4>
-                <p>Terakhir dibuka: ${date}</p>
+    // --- RENDER HISTORY (Grouped & Swipable) ---
+    function renderHistory() {
+      const list = document.getElementById('history-list');
+      list.innerHTML = '';
+      
+      // 1. Get & Sort Data
+      let items = [];
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith(STORAGE_PREFIX)) {
+          try { items.push(JSON.parse(localStorage.getItem(key))); } catch(e){}
+        }
+      });
+      items.sort((a,b) => b.ts - a.ts);
+
+      if(items.length === 0) {
+        list.innerHTML = `<div style="text-align:center; padding:40px; color:var(--text-muted);"><i class="fas fa-inbox" style="font-size:40px; margin-bottom:10px; opacity:0.3;"></i><p>History kosong</p></div>`;
+        return;
+      }
+
+      // 2. Grouping
+      const groups = { 'Hari Ini': [], 'Kemarin': [], 'Minggu Ini': [], 'Lebih Lama': [] };
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+      const yesterday = today - 86400000;
+
+      items.forEach(item => {
+        if (item.ts >= today) groups['Hari Ini'].push(item);
+        else if (item.ts >= yesterday) groups['Kemarin'].push(item);
+        else if (item.ts >= (today - (6*86400000))) groups['Minggu Ini'].push(item);
+        else groups['Lebih Lama'].push(item);
+      });
+
+      // 3. Render UI
+      for (const [groupName, groupItems] of Object.entries(groups)) {
+        if (groupItems.length > 0) {
+          const title = document.createElement('div');
+          title.className = 'group-title';
+          title.innerText = groupName;
+          list.appendChild(title);
+
+          groupItems.forEach(item => {
+            const key = STORAGE_PREFIX + item.name.replace(/\s/g, '');
+            const timeStr = new Date(item.ts).toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+            
+            const wrapper = document.createElement('div');
+            wrapper.className = 'swipe-wrapper';
+            // Add Touch Event Listeners for Swipe
+            setupSwipe(wrapper, key);
+
+            wrapper.innerHTML = `
+              <div class="swipe-bg" onclick="confirmDelete('${key}')"><i class="fas fa-trash"></i></div>
+              <div class="history-card">
+                <div class="history-info">
+                  <div class="history-icon"><i class="fas fa-folder"></i></div>
+                  <div class="history-text">
+                    <h4>${item.name}</h4>
+                    <p>${timeStr} WIB</p>
+                  </div>
+                </div>
+                <a href="${item.url}" target="_blank" style="color:var(--primary); font-size:20px;"><i class="fas fa-chevron-right"></i></a>
               </div>
-            </div>
-            <a href="${item.url}" target="_blank" class="btn-resume">Buka <i class="fas fa-external-link-alt"></i></a>
-          `;
-          listContainer.appendChild(card);
-        });
+            `;
+            list.appendChild(wrapper);
+          });
+        }
       }
     }
 
-    function clearHistory() {
-      if(confirm("Hapus semua history proyek?")) {
-        const keys = Object.keys(localStorage);
-        keys.forEach(key => {
-          if (key.startsWith('cvpro_last_')) {
-            localStorage.removeItem(key);
-          }
-        });
-        checkHistoryCount();
-        renderHistory();
-        alert("History berhasil dihapus.");
-      }
+    // --- SWIPE LOGIC ---
+    function setupSwipe(element, storageKey) {
+      let startX = 0, currentX = 0;
+      const threshold = 60; // pixels to trigger swipe
+
+      element.addEventListener('touchstart', e => {
+        startX = e.touches[0].clientX;
+        element.style.transition = 'none';
+      });
+
+      element.addEventListener('touchmove', e => {
+        currentX = e.touches[0].clientX;
+        let diff = startX - currentX;
+        if (diff < 0) diff = 0; // prevent swipe right
+        if (diff > 100) diff = 100; // max limit
+        
+        element.querySelector('.history-card').style.transform = `translateX(-${diff}px)`;
+        element.querySelector('.swipe-bg').style.transform = `translateX(${100 - diff}%)`;
+      });
+
+      element.addEventListener('touchend', () => {
+        const diff = startX - currentX;
+        element.style.transition = 'transform 0.2s ease';
+        
+        if (diff > threshold) {
+          element.classList.add('swiped'); // Stay swiped
+        } else {
+          element.classList.remove('swiped'); // Snap back
+        }
+      });
     }
 
-    // Cek history saat pertama kali load
+    // --- DELETE FUNCTIONS ---
+    function confirmDelete(key) {
+      pendingDeleteKey = key;
+      document.getElementById('modalTitle').innerText = "Hapus Item?";
+      document.getElementById('modalDesc').innerText = "History proyek ini akan dihapus permanen.";
+      document.getElementById('confirmModal').classList.add('show');
+    }
+
+    function confirmClearAll() {
+      pendingDeleteKey = 'ALL';
+      document.getElementById('modalTitle').innerText = "Hapus Semua?";
+      document.getElementById('modalDesc').innerText = "Semua riwayat akan dikosongkan.";
+      document.getElementById('confirmModal').classList.add('show');
+    }
+
+    document.getElementById('modalBtnAction').addEventListener('click', () => {
+      if (pendingDeleteKey === 'ALL') {
+        Object.keys(localStorage).forEach(key => {
+          if(key.startsWith(STORAGE_PREFIX)) localStorage.removeItem(key);
+        });
+      } else {
+        localStorage.removeItem(pendingDeleteKey);
+      }
+      closeModal();
+      renderHistory();
+      checkHistoryCount();
+    });
+
+    function closeModal() {
+      document.getElementById('confirmModal').classList.remove('show');
+      pendingDeleteKey = null;
+    }
+
+    function checkHistoryCount() {
+      const count = Object.keys(localStorage).filter(k => k.startsWith(STORAGE_PREFIX)).length;
+      const badge = document.getElementById('notif-badge');
+      if(count > 0) badge.classList.add('show'); else badge.classList.remove('show');
+    }
+
+    // ==========================================
+    // 2. NAVIGATION & INIT
+    // ==========================================
+    function switchPage(pageName, el) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('view-'+pageName).classList.add('active');
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      el.classList.add('active');
+      
+      if(pageName === 'history') renderHistory();
+    }
+
+    // Clock
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('time').innerText = now.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+      document.getElementById('date').innerText = now.toLocaleDateString('id-ID', {weekday:'short', day:'numeric', month:'short'});
+      
+      // Greeting Logic
+      const hour = now.getHours();
+      let greet = "Selamat Pagi";
+      if(hour>=15) greet = "Selamat Sore"; else if(hour>=11) greet = "Selamat Siang"; else if(hour<4) greet = "Selamat Malam";
+      if(document.getElementById('view-home').classList.contains('active')) {
+        // Update welcome banner if needed
+      }
+    }
+    setInterval(updateClock, 1000); updateClock();
+
+    // Init
+    if(localStorage.getItem('cvpro_autoclean')) document.getElementById('autoCleanToggle').checked = true;
+    runAutoClean(); // Run cleanup on start
     checkHistoryCount();
 
-
-    // ==========================================
-    // 3. NAVIGASI SPA (Single Page Application)
-    // ==========================================
-    function switchPage(pageName, element) {
-      // Hide all pages
-      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-      
-      // Show selected page
-      document.getElementById('view-' + pageName).classList.add('active');
-
-      // Update Nav Active State
-      document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
-      element.classList.add('active');
-
-      // Jika masuk ke halaman history, render data terbaru
-      if (pageName === 'history') {
-        renderHistory();
-      }
-    }
-
-
-    // ==========================================
-    // 4. PWA SETUP (Manifest & SW)
-    // ==========================================
+    // PWA Setup (Minimal)
     const iconSvg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='120' fill='%232563EB'/><text x='256' y='350' font-size='260' font-family='sans-serif' font-weight='800' fill='white' text-anchor='middle'>CP</text></svg>`;
-    const iconUrl = URL.createObjectURL(new Blob([iconSvg], {type: 'image/svg+xml'}));
-    
-    const manifest = {
-      name: "CVPRO Tools", short_name: "CVPRO", start_url: ".", display: "standalone",
-      background_color: "#F8FAFC", theme_color: "#2563EB", icons: [{ src: iconUrl, sizes: "512x512", type: "image/svg+xml" }]
-    };
-    const link = document.createElement('link'); link.rel = 'manifest'; link.href = URL.createObjectURL(new Blob([JSON.stringify(manifest)], {type: 'application/json'})); document.head.appendChild(link);
-
-    if ('serviceWorker' in navigator) {
-      const swCode = `self.addEventListener('install', e => self.skipWaiting()); self.addEventListener('fetch', e => {});`;
-      navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode], {type: 'text/javascript'}))).catch(() => {});
-    }
-
-    // ==========================================
-    // 5. INSTALL PROMPT
-    // ==========================================
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      setTimeout(() => document.getElementById('installBanner').classList.add('show'), 1500);
-    });
-    document.getElementById('installBtn').addEventListener('click', async () => {
-      if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt = null; document.getElementById('installBanner').classList.remove('show'); }
-    });
-    document.getElementById('dismissBtn').addEventListener('click', () => document.getElementById('installBanner').classList.remove('show'));
+    const manifest = {name:"CVPRO Pro", short_name:"CVPRO", start_url:".", display:"standalone", background_color:"#F8FAFC", theme_color:"#2563EB", icons:[{src:URL.createObjectURL(new Blob([iconSvg],{type:'image/svg+xml'})),sizes:"512x512",type:"image/svg+xml"}]};
+    document.head.appendChild(Object.assign(document.createElement('link'),{rel:'manifest',href:URL.createObjectURL(new Blob([JSON.stringify(manifest)],{type:'application/json'}))}));
+    if('serviceWorker' in navigator) navigator.serviceWorker.register(URL.createObjectURL(new Blob(['self.addEventListener("install",e=>self.skipWaiting());'],{type:'text/javascript'}))).catch(()=>{});
 
   </script>
 </body>
