@@ -2,309 +2,372 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TOOLS - CVPRO</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>CVPRO Tools</title>
 
-  <!-- Meta wajib PWA -->
-  <meta name="theme-color" content="#2980b9">
+  <!-- Meta PWA -->
+  <meta name="theme-color" content="#2563EB">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="CVPRO">
   
-  <!-- Icon untuk iOS (Menggunakan generator favicon inline SVG agar selalu muncul tanpa file eksternal) -->
-  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232980b9'/><text x='50' y='68' font-size='50' font-family='Arial,sans-serif' font-weight='bold' fill='white' text-anchor='middle'>CP</text></svg>">
+  <!-- Icon PWA Inline SVG -->
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%232563EB'/><text x='50' y='68' font-size='45' font-family='sans-serif' font-weight='800' fill='white' text-anchor='middle'>CP</text></svg>">
 
+  <!-- Font Awesome & Google Fonts -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #2563EB;
+      --primary-dark: #1E40AF;
+      --bg-body: #F8FAFC; /* Sedikit lebih abu agar mata nyaman */
+      --bg-card: #FFFFFF;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.05);
+      --safe-area-bottom: env(safe-area-inset-bottom, 20px);
+      --safe-area-top: env(safe-area-inset-top, 20px);
+    }
+
+    * { 
+      margin: 0; padding: 0; box-sizing: border-box; 
+      -webkit-tap-highlight-color: transparent; /* Hilangkan highlight biru saat tap */
+      user-select: none; /* Mencegah seleksi teks seperti aplikasi native */
+    }
     
     body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-      min-height: 100vh;
-      color: #2c3e50;
-      padding: 20px 15px;
-    }
-
-    .container { max-width: 440px; margin: 0 auto; }
-
-    header {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      height: 100dvh; /* Dynamic Viewport Height */
+      overflow: hidden; /* Mencegah scroll pada body utama */
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 35px;
-      padding: 8px 5px;
+      flex-direction: column;
     }
 
-    .logo-container { display: flex; align-items: center; gap: 14px; }
+    /* WRAPPER SCROLLABLE */
+    .app-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: calc(var(--safe-area-top) + 16px) 16px calc(80px + var(--safe-area-bottom)) 16px;
+      scroll-behavior: smooth;
+    }
+    
+    /* Hilangkan scrollbar tapi tetap bisa scroll */
+    .app-content::-webkit-scrollbar { display: none; }
+
+    .container { max-width: 600px; margin: 0 auto; }
+
+    /* HEADER STICKY */
+    header {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 16px;
+      border-radius: 16px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; }
 
     .logo {
-      width: 52px; height: 52px;
-      background: linear-gradient(135deg, #3498db, #2980b9);
-      border-radius: 14px;
+      width: 44px; height: 44px;
+      background: var(--primary);
+      border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      color: white; font-size: 26px; font-weight: bold;
-      box-shadow: 0 6px 14px rgba(52, 152, 219, 0.35);
+      color: white; font-size: 20px; font-weight: 800;
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
     }
 
-    .header-text h1 { font-size: 23px; font-weight: 700; margin-bottom: 3px; }
-    .header-text p { font-size: 14.5px; color: #6c757d; }
+    .brand-info h1 { font-size: 16px; font-weight: 800; letter-spacing: -0.5px; }
+    .brand-info p { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
 
-    .datetime {
-      text-align: right; font-size: 13.5px; color: #6c757d; line-height: 1.45;
-    }
+    .datetime { text-align: right; }
+    .date { font-size: 10px; font-weight: 600; color: var(--text-muted); }
+    .time { font-size: 14px; font-weight: 700; color: var(--primary); }
 
+    /* WELCOME & GREETING */
+    .welcome-banner { margin-bottom: 24px; }
+    .greeting { font-size: 26px; font-weight: 800; color: var(--text-main); margin-bottom: 4px; line-height: 1.2; }
+    .sub-greeting { font-size: 14px; color: var(--text-muted); }
+
+    /* MENU GRID */
     .menu-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(3, 1fr); /* 3 Kolom rapi */
+      gap: 12px;
     }
 
     .menu-item {
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      background: white; border-radius: 22px;
-      padding: 26px 14px; text-decoration: none; color: #2c3e50;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-      transition: all 0.35s ease; height: 148px;
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 20px 10px;
+      text-decoration: none;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.1s, background 0.2s;
+      position: relative;
+      overflow: hidden;
     }
 
-    .menu-item:hover, .menu-item:active {
-      transform: translateY(-8px);
-      box-shadow: 0 16px 32px rgba(52, 152, 219, 0.20);
+    /* Efek klik sentuh (Active State) */
+    .menu-item:active { transform: scale(0.95); background: #F1F5F9; }
+
+    .icon-box {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      background: #F8FAFC;
+    }
+    
+    .menu-label { font-size: 11px; font-weight: 700; text-align: center; line-height: 1.2; }
+
+    /* Warna Ikon */
+    .ats i { color: #2563EB; }
+    .lamaran i { color: #059669; }
+    .resign i { color: #D97706; }
+    .creative1 i { color: #E11D48; }
+    .creative2 i { color: #7C3AED; }
+    .creative3 i { color: #0891B2; }
+    .entry i { color: #4B5563; }
+
+    /* BOTTOM NAVIGATION (Native Feel) */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: white;
+      height: calc(60px + var(--safe-area-bottom));
+      padding-bottom: var(--safe-area-bottom);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+      z-index: 100;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
     }
 
-    .menu-item i {
-      font-size: 40px; margin-bottom: 16px;
-      transition: transform 0.35s ease;
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: #94A3B8;
+      font-size: 10px;
+      font-weight: 600;
+      transition: color 0.2s;
+      height: 100%;
     }
 
-    .menu-item:hover i, .menu-item:active i { transform: scale(1.18); }
-    .menu-item span { font-size: 15px; font-weight: 600; text-align: center; line-height: 1.35; }
+    .nav-item i { font-size: 20px; margin-bottom: 4px; }
+    .nav-item.active { color: var(--primary); }
+    .nav-item:active { color: var(--primary-dark); }
 
-    .ats i      { color: #2980b9; }
-    .lamaran i  { color: #27ae60; }
-    .whatsapp i { color: #25D366; }
-
-    .footer {
-      text-align: center; margin-top: 55px;
-      font-size: 13px; color: #95a5a6;
-    }
-
-    /* Notifikasi Install PWA */
+    /* POPUP INSTALL */
     .install-banner {
-      position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
-      background: #2c3e50; color: white; padding: 16px 24px;
-      border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      display: flex; align-items: center; gap: 15px; z-index: 999;
-      transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      max-width: 90vw;
+      position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(8px);
+      color: white; padding: 12px 20px;
+      border-radius: 24px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      display: flex; align-items: center; gap: 12px; z-index: 200;
+      opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      max-width: 90%;
     }
-    .install-banner.show { bottom: 30px; }
-    .install-banner button {
-      background: #3498db; border: none; color: white;
-      padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer;
+    .install-banner.show { transform: translateX(-50%) translateY(0); opacity: 1; pointer-events: auto; }
+    
+    .install-btn {
+      background: white; color: #2563EB; border: none;
+      padding: 6px 14px; border-radius: 12px; font-weight: 700; font-size: 12px; cursor: pointer;
     }
-    .install-banner .dismiss { background: transparent; color: #95a5a6; }
+    .dismiss-btn { background: transparent; border: none; color: #94A3B8; margin-left: 5px; cursor: pointer; }
+
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <header>
-      <div class="logo-container">
-        <div class="logo">CP</div>
-        <div class="header-text">
-          <h1>CVPRO</h1>
-          <p>Operator</p>
+  <!-- Konten Utama yang bisa di-scroll -->
+  <div class="app-content">
+    <div class="container">
+      
+      <!-- Header Sticky -->
+      <header>
+        <div class="brand">
+          <div class="logo">CP</div>
+          <div class="brand-info">
+            <h1>CVPRO</h1>
+            <p>Operator Tools</p>
+          </div>
         </div>
+        <div class="datetime">
+          <div class="date" id="date">Loading...</div>
+          <div class="time" id="time">--:--</div>
+        </div>
+      </header>
+
+      <!-- Banner Sapaan Otomatis -->
+      <div class="welcome-banner">
+        <div class="greeting" id="greetingText">Selamat Pagi,</div>
+        <div class="sub-greeting">Siap bekerja produktif hari ini?</div>
       </div>
-      <div class="datetime" id="datetime"></div>
-    </header>
 
-    <div class="menu-grid">
-      <a href="https://45.dunnak.com" target="_blank" class="menu-item ats">
-        <i class="fas fa-briefcase"></i>
-        <span>ATS</span>
-      </a>
+      <!-- Grid Menu Tools -->
+      <div class="menu-grid">
+        <a href="https://45.dunnak.com" target="_blank" class="menu-item ats">
+          <div class="icon-box"><i class="fas fa-briefcase"></i></div>
+          <span class="menu-label">ATS</span>
+        </a>
 
-      <a href="https://46.dunnak.com" target="_blank" class="menu-item lamaran">
-        <i class="fas fa-file-alt"></i>
-        <span>LAMARAN</span>
-      </a>
+        <a href="https://46.dunnak.com" target="_blank" class="menu-item lamaran">
+          <div class="icon-box"><i class="fas fa-file-alt"></i></div>
+          <span class="menu-label">LAMARAN</span>
+        </a>
 
-      <a href="https://47.dunnak.com" target="_blank" class="menu-item">
-        <i class="fa-solid fa-envelope" style="color:#A67D22;"></i>
-        <span>RESIGN</span>
-      </a>
+        <a href="https://47.dunnak.com" target="_blank" class="menu-item resign">
+          <div class="icon-box"><i class="fa-solid fa-envelope"></i></div>
+          <span class="menu-label">RESIGN</span>
+        </a>
 
-      <a href="https://51.dunnak.com" target="_blank" class="menu-item">
-        <i class="fas fa-brush" style="color:#F67e82;"></i>
-        <span>CREATIV 1</span>
-      </a>
+        <a href="https://51.dunnak.com" target="_blank" class="menu-item creative1">
+          <div class="icon-box"><i class="fas fa-brush"></i></div>
+          <span class="menu-label">CREATIV 1</span>
+        </a>
 
-      <a href="https://52.dunnak.com" target="_blank" class="menu-item">
-        <i class="fas fa-brush" style="color:#C4a7e3;"></i>
-        <span>CREATIVE 2</span>
-      </a>
+        <a href="https://52.dunnak.com" target="_blank" class="menu-item creative2">
+          <div class="icon-box"><i class="fas fa-brush"></i></div>
+          <span class="menu-label">CREATIVE 2</span>
+        </a>
 
-      <a href="https://53.dunnak.com" target="_blank" class="menu-item">
-        <i class="fas fa-brush" style="color:#A6cF9;"></i>
-        <span>CREATIVE 3</span>
-      </a>
+        <a href="https://53.dunnak.com" target="_blank" class="menu-item creative3">
+          <div class="icon-box"><i class="fas fa-brush"></i></div>
+          <span class="menu-label">CREATIVE 3</span>
+        </a>
 
-      <a href="https://school.dunnak.com" target="_blank" class="menu-item">
-        <i class="fas fa-camera"></i>
-        <span>ATS ENTRY</span>
-      </a>
-    </div>
+        <a href="https://school.dunnak.com" target="_blank" class="menu-item entry">
+          <div class="icon-box"><i class="fas fa-camera"></i></div>
+          <span class="menu-label">ATS ENTRY</span>
+        </a>
+      </div>
 
-    <div class="footer">
-      © 2026 CVPRO<br>
-      Semarang • Semua hak dilindungi
     </div>
   </div>
 
-  <!-- Popup Install PWA -->
+  <!-- Bottom Navigation (Native App Feel) -->
+  <nav class="bottom-nav">
+    <a href="#" class="nav-item active">
+      <i class="fas fa-home"></i>
+      <span>Beranda</span>
+    </a>
+    <a href="#" class="nav-item" onclick="alert('Fitur Notifikasi belum tersedia di demo ini')">
+      <i class="fas fa-bell"></i>
+      <span>Notif</span>
+    </a>
+    <a href="#" class="nav-item" onclick="alert('Fitur Profil belum tersedia di demo ini')">
+      <i class="fas fa-user"></i>
+      <span>Akun</span>
+    </a>
+  </nav>
+
+  <!-- Banner Install -->
   <div class="install-banner" id="installBanner">
-    <i class="fas fa-download" style="font-size: 24px;"></i>
-    <div>
-      <div style="font-size: 14px; font-weight: bold;">Install CVPRO</div>
-      <div style="font-size: 12px; color: #bdc3c7;">Akses cepat dari homescreen</div>
-    </div>
-    <button id="installBtn">Install</button>
-    <button class="dismiss" id="dismissBtn"><i class="fas fa-times"></i></button>
+    <i class="fas fa-cloud-download-alt"></i>
+    <div style="font-size:13px;">Install <b>CVPRO App</b></div>
+    <button class="install-btn" id="installBtn">Pasang</button>
+    <button class="dismiss-btn" id="dismissBtn"><i class="fas fa-times"></i></button>
   </div>
 
   <script>
     // ==========================================
-    // 1. INJECT MANIFEST SECARA DINAMIS
+    // 1. LOGIKA WAKTU & SAPAAN
     // ==========================================
-    const iconSvg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%232980b9'/><text x='256' y='350' font-size='280' font-family='Arial,sans-serif' font-weight='bold' fill='white' text-anchor='middle'>CP</text></svg>`;
-    const iconBlob = new Blob([iconSvg], { type: 'image/svg+xml' });
-    const iconUrl = URL.createObjectURL(iconBlob);
-
-    const manifestData = {
-      name: "CVPRO - Operator Tools",
-      short_name: "CVPRO",
-      description: "Menu Tools Operator Rekrutmen CVPRO",
-      start_url: "./",
-      display: "standalone",
-      background_color: "#f8f9fa",
-      theme_color: "#2980b9",
-      icons: [
-        { src: iconUrl, sizes: "512x512", type: "image/svg+xml", purpose: "any maskable" }
-      ]
-    };
-
-    const manifestBlob = new Blob([JSON.stringify(manifestData)], { type: 'application/json' });
-    const manifestUrl = URL.createObjectURL(manifestBlob);
-    
-    // Pasang link manifest ke <head>
-    const manifestLink = document.createElement('link');
-    manifestLink.rel = 'manifest';
-    manifestLink.href = manifestUrl;
-    document.head.appendChild(manifestLink);
-
-
-    // ==========================================
-    // 2. SERVICE WORKER REGISTRATION
-    // ==========================================
-    if ('serviceWorker' in navigator) {
-      const swCode = `
-        const CACHE_NAME = 'cvpro-tools-v1';
-        const urlsToCache = ['./', 'index.html'];
-
-        self.addEventListener('install', event => {
-          self.skipWaiting();
-          event.waitUntil(
-            caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
-          );
-        });
-
-        self.addEventListener('activate', event => {
-          event.waitUntil(
-            caches.keys().then(names => 
-              Promise.all(names.filter(n => n !== CACHE_NAME).map(n => caches.delete(n)))
-            )
-          );
-          self.clients.claim();
-        });
-
-        self.addEventListener('fetch', event => {
-          event.respondWith(
-            caches.match(event.request).then(response => response || fetch(event.request))
-          );
-        });
-      `;
+    function updateGreetingAndTime() {
+      const now = new Date();
+      const hour = now.getHours();
       
-      // Gunakan Blob untuk mendaftarkan Service Worker
-      const swBlob = new Blob([swCode], { type: 'application/javascript' });
-      const swUrl = URL.createObjectURL(swBlob);
+      // Logika Sapaan
+      let greeting = "Selamat Pagi";
+      if (hour >= 4 && hour < 10) greeting = "Selamat Pagi";
+      else if (hour >= 10 && hour < 15) greeting = "Selamat Siang";
+      else if (hour >= 15 && hour < 18) greeting = "Selamat Sore";
+      else greeting = "Selamat Malam";
 
-      navigator.serviceWorker.register(swUrl, { scope: './' })
-        .then(reg => console.log('✅ SW Aktif, Scope:', reg.scope))
-        .catch(err => console.warn('SW Gagal (Normal jika di file lokal/file://):', err));
+      document.getElementById('greetingText').innerText = greeting + ",";
+
+      // Logika Jam Tanggal
+      const dateOptions = { weekday: 'short', day: 'numeric', month: 'short' };
+      const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: false };
+
+      document.getElementById('date').textContent = now.toLocaleDateString('id-ID', dateOptions);
+      document.getElementById('time').textContent = now.toLocaleTimeString('id-ID', timeOptions);
     }
 
+    setInterval(updateGreetingAndTime, 1000);
+    updateGreetingAndTime(); // Jalankan saat load pertama
+
 
     // ==========================================
-    // 3. LOGIKA TOMBOL INSTALL PWA
+    // 2. PWA MANIFEST INJECTION (Single File Trick)
+    // ==========================================
+    const iconSvg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='120' fill='%232563EB'/><text x='256' y='350' font-size='260' font-family='sans-serif' font-weight='800' fill='white' text-anchor='middle'>CP</text></svg>`;
+    const iconUrl = URL.createObjectURL(new Blob([iconSvg], {type: 'image/svg+xml'}));
+    
+    const manifest = {
+      name: "CVPRO Tools", short_name: "CVPRO", start_url: ".", display: "standalone",
+      background_color: "#F8FAFC", theme_color: "#2563EB", icons: [{ src: iconUrl, sizes: "512x512", type: "image/svg+xml" }]
+    };
+    
+    const link = document.createElement('link');
+    link.rel = 'manifest';
+    link.href = URL.createObjectURL(new Blob([JSON.stringify(manifest)], {type: 'application/json'}));
+    document.head.appendChild(link);
+
+
+    // ==========================================
+    // 3. SERVICE WORKER BASIC
+    // ==========================================
+    if ('serviceWorker' in navigator) {
+      const swCode = `self.addEventListener('install', e => self.skipWaiting()); self.addEventListener('fetch', e => {});`;
+      const swUrl = URL.createObjectURL(new Blob([swCode], {type: 'text/javascript'}));
+      navigator.serviceWorker.register(swUrl).catch(() => {});
+    }
+
+    // ==========================================
+    // 4. INSTALL PROMPT
     // ==========================================
     let deferredPrompt;
-
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       deferredPrompt = e;
-      // Tampilkan banner custom
-      setTimeout(() => {
-        document.getElementById('installBanner').classList.add('show');
-      }, 3000);
+      setTimeout(() => document.getElementById('installBanner').classList.add('show'), 1500);
     });
 
     document.getElementById('installBtn').addEventListener('click', async () => {
       if (deferredPrompt) {
         deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-          console.log('User menginstall PWA');
-        }
         deferredPrompt = null;
         document.getElementById('installBanner').classList.remove('show');
       }
     });
-
-    document.getElementById('dismissBtn').addEventListener('click', () => {
-      document.getElementById('installBanner').classList.remove('show');
-    });
-
-    // Sembunyikan banner jika sudah terinstall
-    window.addEventListener('appinstalled', () => {
-      document.getElementById('installBanner').classList.remove('show');
-      deferredPrompt = null;
-    });
-
-
-    // ==========================================
-    // 4. JAM & TANGGAL REAL-TIME
-    // ==========================================
-    function updateDateTime() {
-      const now = new Date();
-      const dateStr = now.toLocaleDateString('id-ID', { 
-        weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' 
-      });
-      const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-
-      document.getElementById('datetime').innerHTML = `
-        ${dateStr}<br>
-        <strong>${timeStr} WIB</strong>
-      `;
-    }
-
-    setInterval(updateDateTime, 1000);
-    updateDateTime();
+    document.getElementById('dismissBtn').addEventListener('click', () => document.getElementById('installBanner').classList.remove('show'));
   </script>
 </body>
 </html>
