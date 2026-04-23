@@ -175,20 +175,6 @@
     .btn-cancel { background: #F1F5F9; color: var(--text-main); }
     .btn-confirm { background: var(--danger); color: white; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); }
 
-    /* --- LOCK SCREEN --- */
-    #lock-screen {
-      position: fixed; inset: 0; background: var(--bg-body); z-index: 1000;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      transform: translateY(100%); transition: transform 0.4s ease;
-    }
-    #lock-screen.active { transform: translateY(0); }
-    .lock-content { text-align: center; animation: slideUp 0.5s; }
-    .lock-icon { font-size: 40px; color: var(--primary); margin-bottom: 20px; }
-    .unlock-btn {
-      margin-top: 30px; background: var(--primary); color: white; border: none;
-      padding: 14px 40px; border-radius: 30px; font-weight: 700; box-shadow: 0 10px 20px rgba(37, 99, 235, 0.4);
-    }
-
     /* --- BOTTOM NAV --- */
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; width: 100%; height: calc(70px + var(--safe-bottom));
@@ -311,16 +297,6 @@
       <button class="wb-btn" onclick="app.refresh()"><i class="fas fa-sync-alt"></i></button>
     </div>
     <iframe id="app-frame" style="flex:1; width:100%; border:none; background:white;" src="about:blank" allow="encrypted-media; fullscreen"></iframe>
-  </div>
-
-  <!-- LOCK SCREEN -->
-  <div id="lock-screen">
-    <div class="lock-content">
-      <div class="lock-icon"><i class="fas fa-lock"></i></div>
-      <h2>Session Locked</h2>
-      <p style="color:var(--text-muted); margin-top:8px;">Ketuk untuk membuka aplikasi</p>
-      <button class="unlock-btn" onclick="app.unlock()">UNLOCK</button>
-    </div>
   </div>
 
   <!-- MODAL ALERT -->
@@ -500,11 +476,9 @@
     };
 
     const app = {
-      lastActivity: Date.now(),
-      lockTimer: null,
+      // Removed: lastActivity, lockTimer, startSecurityTimer, resetTimer, unlock
       init: () => {
         historyManager.render();
-        app.startSecurityTimer();
         setInterval(app.updateClock, 1000);
         app.updateClock();
       },
@@ -514,7 +488,6 @@
         document.getElementById('webview-overlay').classList.add('active');
         document.getElementById('app-frame').src = url;
         historyManager.add(title, url);
-        app.resetTimer();
       },
       close: () => {
         document.getElementById('webview-overlay').classList.remove('active');
@@ -531,19 +504,6 @@
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         el.classList.add('active');
         if(id === 'view-history') historyManager.render();
-        app.resetTimer();
-      },
-      startSecurityTimer: () => {
-        app.lockTimer = setInterval(() => {
-          if (Date.now() - app.lastActivity > 5 * 60 * 1000) {
-            document.getElementById('lock-screen').classList.add('active');
-          }
-        }, 1000);
-      },
-      resetTimer: () => { app.lastActivity = Date.now(); },
-      unlock: () => {
-        document.getElementById('lock-screen').classList.remove('active');
-        app.resetTimer();
       },
       updateClock: () => {
         document.getElementById('clock').innerText = new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
@@ -558,8 +518,7 @@
       }
     };
 
-    document.addEventListener('click', app.resetTimer);
-    document.addEventListener('touchstart', app.resetTimer);
+    // Removed: global event listeners for resetTimer
     window.onload = app.init;
   </script>
 </body>
