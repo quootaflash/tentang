@@ -6,10 +6,10 @@
   <title>CVPRO Operator</title>
 
   <!-- PWA & ICON SETTINGS -->
-  <meta name="theme-color" content="#111827">
+  <meta name="theme-color" content="#F3F4F6">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="CVPRO">
   
   <!-- 1. FAVICON -->
@@ -26,15 +26,16 @@
     :root {
       --primary: #4F46E5; /* Indigo 600 */
       --primary-dark: #312E81;
-      --bg: #111827;      /* Gray 900 */
-      --card: #1F2937;    /* Gray 800 */
-      --border: #374151;  /* Gray 700 */
-      --text: #F9FAFB;
-      --text-muted: #9CA3AF;
-      --danger: #EF4444;
+      /* LIGHT THEME VARIABLES */
+      --bg: #F3F4F6;      /* Gray 100 - Latar Belakang Aplikasi */
+      --card: #FFFFFF;    /* White - Kartu Menu */
+      --border: #E5E7EB;  /* Gray 200 - Border Halus */
+      --text: #111827;    /* Gray 900 - Teks Utama (Hitam) */
+      --text-muted: #6B7280; /* Gray 500 - Teks Sekunder */
+      --danger: #EF4444;  /* Merah */
       --safe-bottom: env(safe-area-inset-bottom, 20px);
       --safe-top: env(safe-area-inset-top, 10px);
-      --modal-bg: rgba(17, 24, 39, 0.85);
+      --modal-overlay-bg: rgba(0, 0, 0, 0.4); /* Overlay modal sedikit transparan */
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; outline: none; }
@@ -50,13 +51,10 @@
       flex-direction: column;
     }
 
-    /* --- UTILITIES & ANIMATIONS --- */
-    .fade-in { animation: fadeIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    /* --- UTILITIES & ANIMATIONS (OPTIMIZED SPEED) --- */
+    .fade-in { animation: fadeIn 0.3s ease-out forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     
-    .scale-in { animation: scaleIn 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-    @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-
     /* --- SCROLLBAR HIDE --- */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -72,16 +70,16 @@
     .container { max-width: 600px; margin: 0 auto; position: relative; }
 
     /* --- HEADER & LOGO --- */
-    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+    header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
     .brand { display: flex; align-items: center; gap: 15px; }
     
-    /* Logo Box SVG Inline */
+    /* Logo Box */
     .logo-box {
       width: 50px; height: 50px; 
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       border-radius: 14px; 
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25); /* Shadow lebih lembut di mode terang */
       position: relative;
       overflow: hidden;
     }
@@ -93,31 +91,31 @@
     }
     @keyframes shine { 0%, 80% { left: -100%; } 100% { left: 200%; } }
 
-    .brand-info h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.1; }
+    .brand-info h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.1; color: var(--text); }
     .brand-info p { font-size: 10px; font-weight: 700; color: var(--primary); letter-spacing: 1.2px; text-transform: uppercase; margin-top: 4px; }
 
     .clock-display {
-      font-family: 'Plus Jakarta Sans', monospace; font-size: 14px; font-weight: 700; 
-      background: var(--card); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); color: white;
+      font-family: 'Plus Jakarta Sans', monospace; font-size: 13px; font-weight: 600; 
+      background: var(--card); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border); color: var(--text);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
 
     /* --- MENU GRID --- */
     .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
     .menu-item {
-      background: var(--card); border: 1px solid var(--border); border-radius: 18px; 
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px; 
       padding: 18px; display: flex; align-items: center; gap: 14px; 
-      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1); position: relative; overflow: hidden; cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s; 
+      cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
-    .menu-item:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-    .menu-item:active { transform: scale(0.96); }
+    .menu-item:active { transform: scale(0.97); }
     
     .icon-box { 
       width: 44px; height: 44px; border-radius: 12px; 
       background: rgba(79, 70, 229, 0.1); color: var(--primary); 
       display: flex; align-items: center; justify-content: center; font-size: 18px; 
-      transition: 0.3s;
+      transition: 0.2s;
     }
-    .menu-item:hover .icon-box { background: var(--primary); color: white; }
     
     .menu-text { display: flex; flex-direction: column; }
     .menu-label { font-size: 15px; font-weight: 700; color: var(--text); }
@@ -126,30 +124,30 @@
     /* --- WEBVIEW OVERLAY --- */
     #webview-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: #000; z-index: 9999; display: flex; flex-direction: column;
-      transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: #fff; z-index: 9999; display: flex; flex-direction: column;
+      transform: translateY(100%); transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1); /* Sedikit lebih cepat */
     }
     #webview-overlay.active { transform: translateY(0); }
 
     .wb-header {
       height: 70px; padding: 0 20px; padding-top: var(--safe-top);
-      background: rgba(17, 24, 39, 0.95); backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;
     }
-    .wb-title { font-size: 14px; font-weight: 700; color: white; }
+    .wb-title { font-size: 14px; font-weight: 700; color: var(--text); }
     
     .wb-btn-back {
-      display: flex; align-items: center; gap: 8px; color: white; font-size: 14px; font-weight: 600;
-      background: rgba(255,255,255,0.1); padding: 8px 14px; border-radius: 10px; border: none; cursor: pointer;
+      display: flex; align-items: center; gap: 8px; color: var(--text); font-size: 14px; font-weight: 600;
+      background: var(--bg); padding: 8px 14px; border-radius: 10px; border: 1px solid var(--border); cursor: pointer;
     }
-    .wb-btn-back:active { background: var(--primary); }
+    .wb-btn-back:active { background: #E5E7EB; }
     
     .wb-actions { display: flex; gap: 10px; }
     .wb-icon-btn {
-      width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,0.1);
-      color: white; border: none; font-size: 14px; display: flex; align-items: center; justify-content: center; cursor: pointer;
+      width: 38px; height: 38px; border-radius: 10px; background: var(--bg);
+      color: var(--text); border: 1px solid var(--border); font-size: 14px; display: flex; align-items: center; justify-content: center; cursor: pointer;
     }
-    .wb-icon-btn:active { background: var(--primary); }
+    .wb-icon-btn:active { background: #E5E7EB; color: var(--primary); }
 
     .wb-content { flex: 1; width: 100%; height: 100%; border: none; background: white; }
 
@@ -157,45 +155,48 @@
     .search-bar {
       background: var(--card); border: 1px solid var(--border); border-radius: 12px;
       padding: 14px 16px; display: flex; align-items: center; gap: 12px; color: var(--text-muted); margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
-    .search-bar input { background: transparent; border: none; color: white; width: 100%; outline: none; font-family: inherit; font-size: 14px; }
+    .search-bar input { background: transparent; border: none; color: var(--text); width: 100%; outline: none; font-family: inherit; font-size: 14px; }
 
     .stats-box {
       background: linear-gradient(135deg, var(--primary), var(--primary-dark)); 
       border-radius: 18px; padding: 22px; margin-bottom: 25px; 
       display: flex; align-items: center; justify-content: space-between;
-      box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4);
+      box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4);
+      color: white;
     }
     .stats-info h2 { font-size: 32px; font-weight: 800; color: white; line-height: 1; margin-bottom: 4px; }
-    .stats-info p { font-size: 12px; color: rgba(255,255,255,0.8); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .stats-info p { font-size: 12px; color: rgba(255,255,255,0.9); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
 
     .history-card {
       background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px;
       margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;
-      transition: 0.2s;
+      transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
-    .history-card:active { background: #2d3748; }
-    .h-left { display: flex; align-items: center; gap: 14px; flex: 1; }
-    .h-icon { width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 10px; color: #9CA3AF; display: flex; align-items: center; justify-content: center; font-size: 16px; }
-    .h-info h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+    .history-card:active { background: #F9FAFB; transform: scale(0.99); }
+    .h-left { display: flex; align-items: center; gap: 14px; flex: 1; cursor: pointer; }
+    .h-icon { width: 40px; height: 40px; background: var(--bg); border-radius: 10px; color: var(--text-muted); display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .h-info h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; color: var(--text); }
     .h-info p { font-size: 11px; color: var(--text-muted); }
     .h-btns { display: flex; gap: 8px; }
     .h-btn {
       width: 36px; height: 36px; border-radius: 10px; border: none; 
-      background: rgba(255,255,255,0.05); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      background: transparent; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center;
       transition: 0.2s;
     }
-    .h-btn.share:hover { color: var(--primary); background: rgba(79, 70, 229, 0.1); }
-    .h-btn.delete:hover { color: var(--danger); background: rgba(239, 68, 68, 0.1); }
+    /* Tombol Delete saja, share dihapus */
+    .h-btn.delete:active { color: var(--danger); background: rgba(239, 68, 68, 0.1); }
 
     /* --- BOTTOM NAV --- */
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; width: 100%; height: calc(70px + var(--safe-bottom));
-      padding-bottom: var(--safe-bottom); background: rgba(17, 24, 39, 0.9);
+      padding-bottom: var(--safe-bottom); background: rgba(255, 255, 255, 0.9);
       backdrop-filter: blur(12px); border-top: 1px solid var(--border);
       display: flex; justify-content: space-around; align-items: center; z-index: 100;
+      box-shadow: 0 -5px 20px rgba(0,0,0,0.03);
     }
-    .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #6B7280; transition: 0.3s; cursor: pointer; height: 100%; }
+    .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #9CA3AF; transition: 0.3s; cursor: pointer; height: 100%; }
     .nav-item i { font-size: 20px; margin-bottom: 4px; transition: 0.3s; }
     .nav-item span { font-size: 10px; font-weight: 600; }
     .nav-item.active { color: var(--primary); }
@@ -204,26 +205,26 @@
     /* --- TOAST NOTIFICATION --- */
     .toast {
       position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px);
-      background: rgba(255,255,255,0.95); color: #111827; padding: 12px 24px; 
-      border-radius: 30px; font-size: 13px; font-weight: 700; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      opacity: 0; pointer-events: none; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 200; white-space: nowrap;
+      background: #1F2937; color: white; padding: 12px 24px; /* Toast gelap agar kontras di tema terang */
+      border-radius: 30px; font-size: 13px; font-weight: 700; box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      opacity: 0; pointer-events: none; transition: 0.3s; z-index: 200; white-space: nowrap;
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* --- CUSTOM MODAL (PENGGANTI ALERT) --- */
+    /* --- CUSTOM MODAL (LIGHT THEME) --- */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+      background: var(--modal-overlay-bg); backdrop-filter: blur(2px);
       z-index: 2000; display: flex; align-items: center; justify-content: center;
-      opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s ease;
     }
     .modal-overlay.active { opacity: 1; pointer-events: auto; }
 
     .modal-box {
       background: var(--card); width: 85%; max-width: 340px; padding: 24px;
       border-radius: 20px; border: 1px solid var(--border);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-      transform: scale(0.9); opacity: 0; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+      transform: scale(0.95); opacity: 0; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .modal-overlay.active .modal-box { transform: scale(1); opacity: 1; }
 
@@ -231,24 +232,24 @@
       width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
       margin: 0 auto 16px auto; font-size: 24px;
     }
-    .modal-icon.confirm { background: rgba(79, 70, 229, 0.15); color: var(--primary); }
-    .modal-icon.danger { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
-    .modal-icon.success { background: rgba(16, 185, 129, 0.15); color: #10B981; }
+    .modal-icon.confirm { background: rgba(79, 70, 229, 0.1); color: var(--primary); }
+    .modal-icon.danger { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+    .modal-icon.success { background: rgba(16, 185, 129, 0.1); color: #10B981; }
 
-    .modal-title { font-size: 18px; font-weight: 800; text-align: center; margin-bottom: 8px; color: white; }
+    .modal-title { font-size: 18px; font-weight: 800; text-align: center; margin-bottom: 8px; color: var(--text); }
     .modal-desc { font-size: 13px; color: var(--text-muted); text-align: center; margin-bottom: 24px; line-height: 1.5; }
 
     .modal-actions { display: flex; gap: 10px; }
     .modal-btn {
-      flex: 1; padding: 12px; border-radius: 12px; border: none; font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s;
+      flex: 1; padding: 12px; border-radius: 12px; border: 1px solid var(--border); font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s;
     }
-    .modal-btn.cancel { background: rgba(255,255,255,0.05); color: white; }
-    .modal-btn.cancel:active { background: rgba(255,255,255,0.1); }
+    .modal-btn.cancel { background: var(--bg); color: var(--text); }
+    .modal-btn.cancel:active { background: #E5E7EB; }
     
-    .modal-btn.confirm { background: var(--primary); color: white; }
+    .modal-btn.confirm { background: var(--primary); color: white; border-color: var(--primary); }
     .modal-btn.confirm:active { background: var(--primary-dark); }
     
-    .modal-btn.danger { background: var(--danger); color: white; }
+    .modal-btn.danger { background: var(--danger); color: white; border-color: var(--danger); }
     .modal-btn.danger:active { background: #B91C1C; }
 
   </style>
@@ -330,7 +331,7 @@
       </div>
 
       <div style="text-align:center; margin-top:30px; padding-bottom: 20px;">
-        <button onclick="requestClearAll()" style="background:transparent; border:1px solid #374151; color:#9CA3AF; padding:12px 24px; border-radius:12px; font-weight:600; font-size:13px;">Reset Semua Data</button>
+        <button onclick="requestClearAll()" style="background:var(--card); border:1px solid var(--border); color:var(--danger); padding:12px 24px; border-radius:12px; font-weight:600; font-size:13px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">Reset Semua Data</button>
       </div>
     </div>
   </div>
@@ -345,9 +346,7 @@
       <div class="wb-title" id="wb-title">Modul Aktif</div>
       
       <div class="wb-actions">
-        <button class="wb-icon-btn" onclick="shareCurrentUrl()" title="Bagikan Link">
-          <i class="fas fa-share-alt"></i>
-        </button>
+        <!-- Fitur Share Dihapus -->
         <button class="wb-icon-btn" onclick="refreshWebview()" title="Refresh">
           <i class="fas fa-sync-alt"></i>
         </button>
@@ -405,20 +404,27 @@
     const mBtnConfirm = document.getElementById('modal-btn-confirm');
     
     let currentUrl = '';
-    let modalCallback = null; // Menyimpan fungsi callback untuk modal
+    let modalCallback = null;
 
     // --- NAVIGATION LOGIC ---
     function openApp(title, url) {
       currentUrl = url;
       wbTitle.innerText = title;
-      webviewOverlay.classList.add('active');
+      
+      // Set src immediately for speed perception
       appFrame.src = url;
+      
+      // Use requestAnimationFrame to ensure smooth paint
+      requestAnimationFrame(() => {
+        webviewOverlay.classList.add('active');
+      });
+      
       saveHistory(title, url);
     }
 
     function closeWebview() {
       webviewOverlay.classList.remove('active');
-      setTimeout(() => { appFrame.src = 'about:blank'; }, 300);
+      setTimeout(() => { appFrame.src = 'about:blank'; }, 200);
     }
 
     function refreshWebview() {
@@ -426,18 +432,7 @@
       showToast("Memuat ulang halaman...");
     }
 
-    function shareCurrentUrl() {
-      if (navigator.share) {
-        navigator.share({
-          title: 'CVPRO Project Link',
-          text: 'Buka proyek ini di CVPRO:',
-          url: currentUrl
-        }).catch(console.error);
-      } else {
-        navigator.clipboard.writeText(currentUrl);
-        showToast("Link disalin ke clipboard");
-      }
-    }
+    // Fitur ShareCurrentUrl Dihapus dari Script
 
     // --- TOAST SYSTEM ---
     let toastTimeout;
@@ -445,17 +440,14 @@
       toastEl.innerText = msg;
       toastEl.classList.add('show');
       clearTimeout(toastTimeout);
-      toastTimeout = setTimeout(() => toastEl.classList.remove('show'), 2500);
+      toastTimeout = setTimeout(() => toastEl.classList.remove('show'), 2000);
     }
 
     // --- CUSTOM MODAL SYSTEM ---
-    // type: 'confirm', 'danger', 'success'
     function showModal(type, title, desc, onConfirm, confirmText = 'Ya', cancelText = 'Batal') {
-      // Reset styles
       mIcon.className = 'modal-icon';
       mBtnConfirm.className = 'modal-btn confirm';
 
-      // Set Type Styles
       if(type === 'danger') {
         mIcon.classList.add('danger');
         mIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
@@ -468,16 +460,11 @@
         mIcon.innerHTML = '<i class="fas fa-question"></i>';
       }
 
-      // Set Content
       mTitle.innerText = title;
       mDesc.innerText = desc;
       mBtnConfirm.innerText = confirmText;
       mBtnCancel.innerText = cancelText;
-
-      // Set Callback
       modalCallback = onConfirm;
-
-      // Show
       modalEl.classList.add('active');
     }
 
@@ -486,15 +473,12 @@
       modalCallback = null;
     }
 
-    // Modal Button Listeners
     mBtnCancel.addEventListener('click', hideModal);
-    
     mBtnConfirm.addEventListener('click', () => {
       if (modalCallback) modalCallback();
       hideModal();
     });
 
-    // Close on background click
     modalEl.addEventListener('click', (e) => {
       if (e.target === modalEl) hideModal();
     });
@@ -541,7 +525,7 @@
       items.sort((a,b) => b.ts - a.ts);
 
       if(items.length === 0) {
-        list.innerHTML = '<div style="text-align:center; color:#4B5563; padding:50px 20px; font-size:13px; display:flex; flex-direction:column; align-items:center; gap:10px;"><i class="fas fa-folder-open" style="font-size:30px; margin-bottom:10px;"></i><br>Belum ada riwayat akses.</div>';
+        list.innerHTML = '<div style="text-align:center; color:#9CA3AF; padding:50px 20px; font-size:13px; display:flex; flex-direction:column; align-items:center; gap:10px;"><i class="fas fa-folder-open" style="font-size:30px; margin-bottom:10px; opacity:0.5;"></i><br>Belum ada riwayat akses.</div>';
         return;
       }
 
@@ -551,6 +535,7 @@
         const div = document.createElement('div');
         div.className = 'history-card fade-in';
         div.style.animationDelay = `${index * 0.05}s`;
+        // Tombol Share Dihapus dari HTML string ini
         div.innerHTML = `
           <div class="h-left" onclick="openApp('${item.name}', '${item.url}')">
             <div class="h-icon"><i class="fas fa-history"></i></div>
@@ -560,7 +545,6 @@
             </div>
           </div>
           <div class="h-btns">
-            <button class="h-btn share" onclick="shareItem('${item.url}')"><i class="fas fa-share-alt"></i></button>
             <button class="h-btn delete" onclick="requestDeleteItem('${STORAGE_PREFIX}${item.name.replace(/\s+/g,'')}')"><i class="fas fa-trash"></i></button>
           </div>
         `;
@@ -568,16 +552,8 @@
       });
     }
 
-    function shareItem(url) {
-      if (navigator.share) navigator.share({ url: url }).catch(()=>{});
-      else {
-        navigator.clipboard.writeText(url);
-        showToast("Link disalin");
-      }
-    }
+    // Fitur ShareItem Dihapus dari Script
 
-    // --- WRAPPER FUNCTIONS FOR CONFIRMATION ---
-    
     function requestDeleteItem(key) {
       showModal(
         'danger', 
@@ -617,13 +593,11 @@
       renderHistory(document.getElementById('search-input').value);
     }
 
-    // --- TAB SWITCHING ---
     function switchPage(id, el) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.getElementById(id).classList.add('active');
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
       el.classList.add('active');
-      
       if(id === 'view-history') renderHistory();
     }
 
@@ -643,8 +617,8 @@
       short_name: "CVPRO",
       start_url: ".",
       display: "standalone",
-      background_color: "#111827",
-      theme_color: "#111827",
+      background_color: "#F3F4F6", // Light background for PWA
+      theme_color: "#F3F4F6",
       description: "Aplikasi Manajemen Operator CVPRO",
       icons: [
         { src: "https://picsum.photos/seed/cvproicon2024/192/192", sizes: "192x192", type: "image/jpeg" },
