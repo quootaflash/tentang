@@ -12,11 +12,10 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="CVPRO">
   
-  <!-- 1. FAVICON untuk Browser Tab -->
+  <!-- 1. FAVICON -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%234F46E5'/><text x='50' y='68' font-size='40' font-family='Arial,sans-serif' font-weight='900' fill='white' text-anchor='middle'>CP</text></svg>">
 
-  <!-- 2. APPLE TOUCH ICON untuk iOS Home Screen -->
-  <!-- Menggunakan placeholder gambar yang konsisten agar icon terbaca saat "Add to Home Screen" -->
+  <!-- 2. APPLE TOUCH ICON -->
   <link rel="apple-touch-icon" href="https://picsum.photos/seed/cvproicon2024/180/180">
 
   <!-- FONTS & ICONS LIBRARY -->
@@ -35,6 +34,7 @@
       --danger: #EF4444;
       --safe-bottom: env(safe-area-inset-bottom, 20px);
       --safe-top: env(safe-area-inset-top, 10px);
+      --modal-bg: rgba(17, 24, 39, 0.85);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; outline: none; }
@@ -50,10 +50,13 @@
       flex-direction: column;
     }
 
-    /* --- UTILITIES --- */
+    /* --- UTILITIES & ANIMATIONS --- */
     .fade-in { animation: fadeIn 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     
+    .scale-in { animation: scaleIn 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
     /* --- SCROLLBAR HIDE --- */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -82,7 +85,6 @@
       position: relative;
       overflow: hidden;
     }
-    /* Efek kilau pada logo */
     .logo-box::after {
       content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
       background: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
@@ -181,6 +183,7 @@
     .h-btn {
       width: 36px; height: 36px; border-radius: 10px; border: none; 
       background: rgba(255,255,255,0.05); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: 0.2s;
     }
     .h-btn.share:hover { color: var(--primary); background: rgba(79, 70, 229, 0.1); }
     .h-btn.delete:hover { color: var(--danger); background: rgba(239, 68, 68, 0.1); }
@@ -201,11 +204,52 @@
     /* --- TOAST NOTIFICATION --- */
     .toast {
       position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px);
-      background: rgba(255,255,255,0.95); color: #111827; padding: 10px 20px; 
-      border-radius: 30px; font-size: 13px; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      opacity: 0; pointer-events: none; transition: 0.3s; z-index: 200; white-space: nowrap;
+      background: rgba(255,255,255,0.95); color: #111827; padding: 12px 24px; 
+      border-radius: 30px; font-size: 13px; font-weight: 700; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      opacity: 0; pointer-events: none; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 200; white-space: nowrap;
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* --- CUSTOM MODAL (PENGGANTI ALERT) --- */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+      z-index: 2000; display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+    .modal-box {
+      background: var(--card); width: 85%; max-width: 340px; padding: 24px;
+      border-radius: 20px; border: 1px solid var(--border);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      transform: scale(0.9); opacity: 0; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .modal-overlay.active .modal-box { transform: scale(1); opacity: 1; }
+
+    .modal-icon {
+      width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px auto; font-size: 24px;
+    }
+    .modal-icon.confirm { background: rgba(79, 70, 229, 0.15); color: var(--primary); }
+    .modal-icon.danger { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+    .modal-icon.success { background: rgba(16, 185, 129, 0.15); color: #10B981; }
+
+    .modal-title { font-size: 18px; font-weight: 800; text-align: center; margin-bottom: 8px; color: white; }
+    .modal-desc { font-size: 13px; color: var(--text-muted); text-align: center; margin-bottom: 24px; line-height: 1.5; }
+
+    .modal-actions { display: flex; gap: 10px; }
+    .modal-btn {
+      flex: 1; padding: 12px; border-radius: 12px; border: none; font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s;
+    }
+    .modal-btn.cancel { background: rgba(255,255,255,0.05); color: white; }
+    .modal-btn.cancel:active { background: rgba(255,255,255,0.1); }
+    
+    .modal-btn.confirm { background: var(--primary); color: white; }
+    .modal-btn.confirm:active { background: var(--primary-dark); }
+    
+    .modal-btn.danger { background: var(--danger); color: white; }
+    .modal-btn.danger:active { background: #B91C1C; }
 
   </style>
 </head>
@@ -217,7 +261,6 @@
       <header>
         <div class="brand">
           <div class="logo-box">
-            <!-- Inline SVG Logo agar tajam dan ringan -->
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect width="24" height="24" rx="6" fill="white"/>
               <path d="M7 7H10V17H7V7Z" fill="#4F46E5"/>
@@ -287,7 +330,7 @@
       </div>
 
       <div style="text-align:center; margin-top:30px; padding-bottom: 20px;">
-        <button onclick="clearAllHistory()" style="background:transparent; border:1px solid #374151; color:#9CA3AF; padding:12px 24px; border-radius:12px; font-weight:600; font-size:13px;">Reset Semua Data</button>
+        <button onclick="requestClearAll()" style="background:transparent; border:1px solid #374151; color:#9CA3AF; padding:12px 24px; border-radius:12px; font-weight:600; font-size:13px;">Reset Semua Data</button>
       </div>
     </div>
   </div>
@@ -311,8 +354,23 @@
       </div>
     </div>
     
-    <!-- Allow Popups and Same Origin for better compatibility -->
     <iframe id="app-frame" class="wb-content" src="about:blank" allow="encrypted-media; fullscreen; clipboard-read; clipboard-write"></iframe>
+  </div>
+
+  <!-- CUSTOM MODAL COMPONENT -->
+  <div id="custom-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div id="modal-icon-container" class="modal-icon confirm">
+        <i class="fas fa-question"></i>
+      </div>
+      <h3 id="modal-title" class="modal-title">Judul Konfirmasi</h3>
+      <p id="modal-desc" class="modal-desc">Deskripsi detail akan muncul di sini.</p>
+      
+      <div class="modal-actions">
+        <button id="modal-btn-cancel" class="modal-btn cancel">Batal</button>
+        <button id="modal-btn-confirm" class="modal-btn confirm">Ya, Lanjutkan</button>
+      </div>
+    </div>
   </div>
 
   <!-- BOTTOM NAV -->
@@ -337,7 +395,17 @@
     const appFrame = document.getElementById('app-frame');
     const wbTitle = document.getElementById('wb-title');
     const toastEl = document.getElementById('toast');
+    const modalEl = document.getElementById('custom-modal');
+    
+    // Modal Elements
+    const mIcon = document.getElementById('modal-icon-container');
+    const mTitle = document.getElementById('modal-title');
+    const mDesc = document.getElementById('modal-desc');
+    const mBtnCancel = document.getElementById('modal-btn-cancel');
+    const mBtnConfirm = document.getElementById('modal-btn-confirm');
+    
     let currentUrl = '';
+    let modalCallback = null; // Menyimpan fungsi callback untuk modal
 
     // --- NAVIGATION LOGIC ---
     function openApp(title, url) {
@@ -350,7 +418,6 @@
 
     function closeWebview() {
       webviewOverlay.classList.remove('active');
-      // Delay clear src agar animasi transisi lebih mulus
       setTimeout(() => { appFrame.src = 'about:blank'; }, 300);
     }
 
@@ -367,17 +434,70 @@
           url: currentUrl
         }).catch(console.error);
       } else {
-        // Fallback copy
         navigator.clipboard.writeText(currentUrl);
         showToast("Link disalin ke clipboard");
       }
     }
 
+    // --- TOAST SYSTEM ---
+    let toastTimeout;
     function showToast(msg) {
       toastEl.innerText = msg;
       toastEl.classList.add('show');
-      setTimeout(() => toastEl.classList.remove('show'), 2500);
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => toastEl.classList.remove('show'), 2500);
     }
+
+    // --- CUSTOM MODAL SYSTEM ---
+    // type: 'confirm', 'danger', 'success'
+    function showModal(type, title, desc, onConfirm, confirmText = 'Ya', cancelText = 'Batal') {
+      // Reset styles
+      mIcon.className = 'modal-icon';
+      mBtnConfirm.className = 'modal-btn confirm';
+
+      // Set Type Styles
+      if(type === 'danger') {
+        mIcon.classList.add('danger');
+        mIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+        mBtnConfirm.className = 'modal-btn danger';
+      } else if (type === 'success') {
+        mIcon.classList.add('success');
+        mIcon.innerHTML = '<i class="fas fa-check"></i>';
+      } else {
+        mIcon.classList.add('confirm');
+        mIcon.innerHTML = '<i class="fas fa-question"></i>';
+      }
+
+      // Set Content
+      mTitle.innerText = title;
+      mDesc.innerText = desc;
+      mBtnConfirm.innerText = confirmText;
+      mBtnCancel.innerText = cancelText;
+
+      // Set Callback
+      modalCallback = onConfirm;
+
+      // Show
+      modalEl.classList.add('active');
+    }
+
+    function hideModal() {
+      modalEl.classList.remove('active');
+      modalCallback = null;
+    }
+
+    // Modal Button Listeners
+    mBtnCancel.addEventListener('click', hideModal);
+    
+    mBtnConfirm.addEventListener('click', () => {
+      if (modalCallback) modalCallback();
+      hideModal();
+    });
+
+    // Close on background click
+    modalEl.addEventListener('click', (e) => {
+      if (e.target === modalEl) hideModal();
+    });
 
     // --- HISTORY ENGINE ---
     function saveHistory(name, url) {
@@ -417,7 +537,6 @@
         }
       });
 
-      // Filter & Sort (Latest first)
       if(filterText) items = items.filter(i => i.name.toLowerCase().includes(filterText.toLowerCase()));
       items.sort((a,b) => b.ts - a.ts);
 
@@ -431,7 +550,7 @@
         
         const div = document.createElement('div');
         div.className = 'history-card fade-in';
-        div.style.animationDelay = `${index * 0.05}s`; // Stagger effect
+        div.style.animationDelay = `${index * 0.05}s`;
         div.innerHTML = `
           <div class="h-left" onclick="openApp('${item.name}', '${item.url}')">
             <div class="h-icon"><i class="fas fa-history"></i></div>
@@ -442,7 +561,7 @@
           </div>
           <div class="h-btns">
             <button class="h-btn share" onclick="shareItem('${item.url}')"><i class="fas fa-share-alt"></i></button>
-            <button class="h-btn delete" onclick="deleteHistory('${STORAGE_PREFIX}${item.name.replace(/\s+/g,'')}')"><i class="fas fa-trash"></i></button>
+            <button class="h-btn delete" onclick="requestDeleteItem('${STORAGE_PREFIX}${item.name.replace(/\s+/g,'')}')"><i class="fas fa-trash"></i></button>
           </div>
         `;
         list.appendChild(div);
@@ -457,24 +576,41 @@
       }
     }
 
-    function deleteHistory(key) {
-      if(confirm("Hapus history ini?")) {
-        localStorage.removeItem(key);
-        updateStats();
-        renderHistory(document.getElementById('search-input').value);
-        showToast("History dihapus");
-      }
+    // --- WRAPPER FUNCTIONS FOR CONFIRMATION ---
+    
+    function requestDeleteItem(key) {
+      showModal(
+        'danger', 
+        'Hapus Riwayat?', 
+        'Tindakan ini tidak dapat dibatalkan. Riwayat proyek ini akan dihapus permanen dari penyimpanan.',
+        () => executeDeleteHistory(key)
+      );
     }
 
-    function clearAllHistory() {
-      if(confirm("Apakah Anda yakin ingin menghapus semua riwayat?")) {
-        Object.keys(localStorage).forEach(k => {
-          if(k.startsWith(STORAGE_PREFIX)) localStorage.removeItem(k);
-        });
-        updateStats();
-        renderHistory();
-        showToast("Semua data direset");
-      }
+    function executeDeleteHistory(key) {
+      localStorage.removeItem(key);
+      updateStats();
+      renderHistory(document.getElementById('search-input').value);
+      showToast("Riwayat berhasil dihapus");
+    }
+
+    function requestClearAll() {
+      showModal(
+        'danger', 
+        'Reset Semua Data', 
+        'Apakah Anda yakin ingin menghapus SEMUA riwayat akses? Data tidak dapat dipulihkan.',
+        () => executeClearAllHistory(),
+        'Hapus Semua'
+      );
+    }
+
+    function executeClearAllHistory() {
+      Object.keys(localStorage).forEach(k => {
+        if(k.startsWith(STORAGE_PREFIX)) localStorage.removeItem(k);
+      });
+      updateStats();
+      renderHistory();
+      showToast("Semua data telah direset");
     }
 
     function filterHistory() {
@@ -496,14 +632,12 @@
       const now = new Date();
       document.getElementById('clock').innerText = now.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
     }, 1000);
-    // Set immediate
     document.getElementById('clock').innerText = new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
 
     // --- INIT ---
     updateStats();
 
     // --- PWA MANIFEST DYNAMIC INJECTION ---
-    // Menggunakan icon eksternal agar terdeteksi sebagai "App Icon" saat install PWA
     const manifestData = {
       name: "CVPRO Operator",
       short_name: "CVPRO",
@@ -513,23 +647,14 @@
       theme_color: "#111827",
       description: "Aplikasi Manajemen Operator CVPRO",
       icons: [
-        {
-          src: "https://picsum.photos/seed/cvproicon2024/192/192",
-          sizes: "192x192",
-          type: "image/jpeg"
-        },
-        {
-          src: "https://picsum.photos/seed/cvproicon2024/512/512",
-          sizes: "512x512",
-          type: "image/jpeg"
-        }
+        { src: "https://picsum.photos/seed/cvproicon2024/192/192", sizes: "192x192", type: "image/jpeg" },
+        { src: "https://picsum.photos/seed/cvproicon2024/512/512", sizes: "512x512", type: "image/jpeg" }
       ]
     };
     
     const stringManifest = JSON.stringify(manifestData);
     const blob = new Blob([stringManifest], {type: 'application/json'});
     const manifestURL = URL.createObjectURL(blob);
-    
     const link = document.createElement('link');
     link.rel = 'manifest';
     link.href = manifestURL;
