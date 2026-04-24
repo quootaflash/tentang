@@ -35,14 +35,18 @@
       --danger: #EF4444;  /* Merah */
       --safe-bottom: env(safe-area-inset-bottom, 20px);
       --safe-top: env(safe-area-inset-top, 10px);
-      --modal-overlay-bg: rgba(0, 0, 0, 0.4); /* Overlay modal sedikit transparan */
+      --modal-overlay-bg: rgba(0, 0, 0, 0.4);
       
-      /* Tambahan Warna untuk Kategori Menu */
-      --cat-color-1: #4F46E5; /* Indigo - ATS */
-      --cat-color-2: #0EA5E9; /* Sky Blue - Lamaran */
-      --cat-color-3: #F43F5E; /* Rose - Resign */
-      --cat-color-4: #8B5CF6; /* Violet - Creative */
-      --cat-color-5: #EC4899; /* Pink - Fresh Grad */
+      /* Tambahan Warna Kategori */
+      --cat-indigo: #4F46E5; 
+      --cat-blue: #0EA5E9;
+      --cat-red: #F43F5E;
+      --cat-violet: #8B5CF6;
+      --cat-pink: #EC4899;
+      --cat-teal: #14B8A6;
+      --cat-orange: #F97316;
+      --cat-slate: #64748B;
+      --cat-green: #10B981;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; outline: none; }
@@ -58,11 +62,10 @@
       flex-direction: column;
     }
 
-    /* --- UTILITIES & ANIMATIONS (OPTIMIZED SPEED) --- */
+    /* --- UTILITIES & ANIMATIONS --- */
     .fade-in { animation: fadeIn 0.3s ease-out forwards; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     
-    /* --- SCROLLBAR HIDE --- */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
@@ -80,13 +83,12 @@
     header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
     .brand { display: flex; align-items: center; gap: 15px; }
     
-    /* Logo Box */
     .logo-box {
       width: 50px; height: 50px; 
       background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       border-radius: 14px; 
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25); /* Shadow lebih lembut di mode terang */
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
       position: relative;
       overflow: hidden;
     }
@@ -108,14 +110,12 @@
     }
 
     /* --- MENU GRID --- */
-    /* Grid 3 Kolom agar muat lebih banyak menu */
     .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
     
-    /* Section Separator */
     .section-title {
       grid-column: 1 / -1;
       font-size: 11px; font-weight: 700; color: var(--text-muted); 
-      margin-top: 15px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px;
+      margin-top: 20px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px;
       padding-left: 4px;
     }
 
@@ -130,15 +130,19 @@
     .icon-box { 
       width: 40px; height: 40px; border-radius: 11px; 
       display: flex; align-items: center; justify-content: center; font-size: 16px; 
-      transition: 0.2s;
-      color: white;
+      transition: 0.2s; color: white;
     }
-    /* Icon Colors based on category */
-    .icon-box.ats { background: linear-gradient(135deg, #4F46E5, #4338ca); }
-    .icon-box.doc { background: linear-gradient(135deg, #0EA5E9, #0284c7); }
-    .icon-box.hrs { background: linear-gradient(135deg, #F43F5E, #e11d48); }
-    .icon-box.crt { background: linear-gradient(135deg, #8B5CF6, #7c3aed); }
-    .icon-box.fg  { background: linear-gradient(135deg, #EC4899, #db2777); }
+    
+    /* Warna Icon Spesifik */
+    .icon-box.indigo { background: linear-gradient(135deg, #4F46E5, #4338ca); }
+    .icon-box.blue { background: linear-gradient(135deg, #0EA5E9, #0284c7); }
+    .icon-box.red { background: linear-gradient(135deg, #F43F5E, #e11d48); }
+    .icon-box.violet { background: linear-gradient(135deg, #8B5CF6, #7c3aed); }
+    .icon-box.pink { background: linear-gradient(135deg, #EC4899, #db2777); }
+    .icon-box.teal { background: linear-gradient(135deg, #14B8A6, #0d9488); }
+    .icon-box.orange { background: linear-gradient(135deg, #F97316, #ea580c); }
+    .icon-box.slate { background: linear-gradient(135deg, #64748B, #475569); }
+    .icon-box.green { background: linear-gradient(135deg, #10B981, #059669); }
     
     .menu-text { display: flex; flex-direction: column; flex: 1; }
     .menu-label { font-size: 14px; font-weight: 700; color: var(--text); }
@@ -148,7 +152,7 @@
     #webview-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: #fff; z-index: 9999; display: flex; flex-direction: column;
-      transform: translateY(100%); transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1); /* Sedikit lebih cepat */
+      transform: translateY(100%); transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
     #webview-overlay.active { transform: translateY(0); }
 
@@ -233,7 +237,7 @@
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* --- CUSTOM MODAL (LIGHT THEME) --- */
+    /* --- CUSTOM MODAL --- */
     .modal-overlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: var(--modal-overlay-bg); backdrop-filter: blur(2px);
@@ -267,10 +271,8 @@
     }
     .modal-btn.cancel { background: var(--bg); color: var(--text); }
     .modal-btn.cancel:active { background: #E5E7EB; }
-    
     .modal-btn.confirm { background: var(--primary); color: white; border-color: var(--primary); }
     .modal-btn.confirm:active { background: var(--primary-dark); }
-    
     .modal-btn.danger { background: var(--danger); color: white; border-color: var(--danger); }
     .modal-btn.danger:active { background: #B91C1C; }
 
@@ -290,55 +292,86 @@
               <path d="M14 7H17V17H14V7Z" fill="#4F46E5"/>
             </svg>
           </div>
-          <div class="brand-info"><h1>Writehub</h1><p>Versi 3.70</p></div>
+          <div class="brand-info"><h1>Writehub</h1><p>Versi 3.80</p></div>
         </div>
         <div class="clock-display" id="clock">--:--</div>
       </header>
 
       <div class="menu-grid fade-in">
         
-        <!-- Group 1: HR & Systems -->
-        <div class="section-title">Sistem & HR</div>
-        
+        <!-- KATEGORI 1: UTAMA -->
+        <div class="section-title">Sistem Utama</div>
         <div class="menu-item" onclick="openApp('ATS Portal', 'https://45.dunnak.com')">
-          <div class="icon-box ats"><i class="fas fa-briefcase"></i></div>
+          <div class="icon-box indigo"><i class="fas fa-briefcase"></i></div>
           <div class="menu-text"><div class="menu-label">ATS</div><div class="menu-sub">Rekrutmen</div></div>
         </div>
-        <div class="menu-item" onclick="openApp('Resign', 'https://47.dunnak.com')">
-          <div class="icon-box hrs"><i class="fa-solid fa-envelope-open-text"></i></div>
-          <div class="menu-text"><div class="menu-label">Resign</div><div class="menu-sub">HR System</div></div>
-        </div>
-
-        <!-- Group 2: Documents & Creative -->
-        <div class="section-title">Dokumen & Kreatif</div>
-
         <div class="menu-item" onclick="openApp('Lamaran', 'https://46.dunnak.com')">
-          <div class="icon-box doc"><i class="fas fa-file-signature"></i></div>
+          <div class="icon-box blue"><i class="fas fa-file-signature"></i></div>
           <div class="menu-text"><div class="menu-label">Lamaran</div><div class="menu-sub">Dokumen</div></div>
         </div>
+        <div class="menu-item" onclick="openApp('Resign', 'https://47.dunnak.com')">
+          <div class="icon-box red"><i class="fa-solid fa-envelope-open-text"></i></div>
+          <div class="menu-text"><div class="menu-label">Resign</div><div class="menu-sub">HR System</div></div>
+        </div>
         <div class="menu-item" onclick="openApp('Scanner Entry', 'https://2009.dunnak.com')">
-          <div class="icon-box crt"><i class="fas fa-camera-retro"></i></div>
+          <div class="icon-box violet"><i class="fas fa-camera-retro"></i></div>
           <div class="menu-text"><div class="menu-label">ATS Foto</div><div class="menu-sub">Entry Data</div></div>
         </div>
+
+        <!-- KATEGORI 2: DESIGN & FRESH GRAD -->
+        <div class="section-title">Desain & Karir Awal</div>
+        <div class="menu-item" onclick="openApp('Fresh Grad', 'https://54.dunnak.com')">
+          <div class="icon-box pink"><i class="fas fa-user-graduate"></i></div>
+          <div class="menu-text"><div class="menu-label">Fresh Grad</div><div class="menu-sub">Lulusan Baru</div></div>
+        </div>
         <div class="menu-item" onclick="openApp('Creative 1', 'https://51.dunnak.com')">
-          <div class="icon-box crt"><i class="fas fa-palette"></i></div>
+          <div class="icon-box violet"><i class="fas fa-palette"></i></div>
           <div class="menu-text"><div class="menu-label">Creative 1</div><div class="menu-sub">Design</div></div>
         </div>
         <div class="menu-item" onclick="openApp('Creative 2', 'https://52.dunnak.com')">
-          <div class="icon-box crt"><i class="fas fa-layer-group"></i></div>
+          <div class="icon-box violet"><i class="fas fa-layer-group"></i></div>
           <div class="menu-text"><div class="menu-label">Creative 2</div><div class="menu-sub">Design</div></div>
         </div>
         <div class="menu-item" onclick="openApp('Creative 3', 'https://53.dunnak.com')">
-          <div class="icon-box crt"><i class="fas fa-bezier-curve"></i></div>
+          <div class="icon-box violet"><i class="fas fa-bezier-curve"></i></div>
           <div class="menu-text"><div class="menu-label">Creative 3</div><div class="menu-sub">Design</div></div>
         </div>
 
-        <!-- Group 3: Fresh Graduate (NEW) -->
-        <div class="section-title">Karir</div>
+        <!-- KATEGORI 3: JOB MARKET (BARU) -->
+        <div class="section-title">Pasar Kerja</div>
+        <div class="menu-item" onclick="openApp('Internship', 'https://45.dunnak.com')">
+          <div class="icon-box teal"><i class="fas fa-school"></i></div>
+          <div class="menu-text"><div class="menu-label">Internship</div><div class="menu-sub">Program Magang</div></div>
+        </div>
+        <div class="menu-item" onclick="openApp('Freelance', 'https://45.dunnak.com')">
+          <div class="icon-box orange"><i class="fas fa-laptop-house"></i></div>
+          <div class="menu-text"><div class="menu-label">Freelance</div><div class="menu-sub">Proyek Harian</div></div>
+        </div>
+        <div class="menu-item" onclick="openApp('Remote', 'https://45.dunnak.com')">
+          <div class="icon-box green"><i class="fas fa-wifi"></i></div>
+          <div class="menu-text"><div class="menu-label">Remote</div><div class="menu-sub">Kerja Daring</div></div>
+        </div>
 
-        <div class="menu-item" onclick="openApp('Fresh Grad', 'https://54.dunnak.com')">
-          <div class="icon-box fg"><i class="fas fa-user-graduate"></i></div>
-          <div class="menu-text"><div class="menu-label">Fresh Grad</div><div class="menu-sub">Lulusan Baru</div></div>
+        <!-- KATEGORI 4: INSTANSI & NASIONAL -->
+        <div class="section-title">Instansi & Resmi</div>
+        <div class="menu-item" onclick="openApp('BUMN', 'https://45.dunnak.com')">
+          <div class="icon-box indigo"><i class="fas fa-building"></i></div>
+          <div class="menu-text"><div class="menu-label">BUMN</div><div class="menu-sub">Badan Usaha</div></div>
+        </div>
+        <div class="menu-item" onclick="openApp('CPNS', 'https://45.dunnak.com')">
+          <div class="icon-box slate"><i class="fas fa-landmark"></i></div>
+          <div class="menu-text"><div class="menu-label">CPNS</div><div class="menu-sub">Seleksi CASN</div></div>
+        </div>
+
+        <!-- KATEGORI 5: TAMBAHAN -->
+        <div class="section-title">Lainnya</div>
+        <div class="menu-item" onclick="openApp('Loker Viral', 'https://45.dunnak.com')">
+          <div class="icon-box red"><i class="fas fa-fire"></i></div>
+          <div class="menu-text"><div class="menu-label">Loker Viral</div><div class="menu-sub">Info Cepat</div></div>
+        </div>
+        <div class="menu-item" onclick="openApp('Karir Global', 'https://45.dunnak.com')">
+          <div class="icon-box blue"><i class="fas fa-globe-asia"></i></div>
+          <div class="menu-text"><div class="menu-label">Karir Global</div><div class="menu-sub">Internasional</div></div>
         </div>
 
       </div>
@@ -385,7 +418,6 @@
       <div class="wb-title" id="wb-title">Modul Aktif</div>
       
       <div class="wb-actions">
-        <!-- Fitur Share Dihapus -->
         <button class="wb-icon-btn" onclick="refreshWebview()" title="Refresh">
           <i class="fas fa-sync-alt"></i>
         </button>
@@ -572,7 +604,6 @@
         const div = document.createElement('div');
         div.className = 'history-card fade-in';
         div.style.animationDelay = `${index * 0.05}s`;
-        // Tombol Share Dihapus
         div.innerHTML = `
           <div class="h-left" onclick="openApp('${item.name}', '${item.url}')">
             <div class="h-icon"><i class="fas fa-history"></i></div>
