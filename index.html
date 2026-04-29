@@ -2,6 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
+  <!-- Viewport yang ramah Mobile & Desktop -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Writehub</title>
 
@@ -11,6 +12,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Writehub">
+  <meta name="description" content="Aplikasi Manajemen Karir & Portofolio">
   
   <!-- 1. FAVICON -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%234F46E5'/><text x='50' y='68' font-size='40' font-family='Arial,sans-serif' font-weight='900' fill='white' text-anchor='middle'>CP</text></svg>">
@@ -27,12 +29,12 @@
       --primary: #4F46E5; /* Indigo 600 */
       --primary-dark: #312E81;
       /* LIGHT THEME VARIABLES */
-      --bg: #F3F4F6;      /* Gray 100 - Latar Belakang Aplikasi */
-      --card: #FFFFFF;    /* White - Kartu Menu */
-      --border: #E5E7EB;  /* Gray 200 - Border Halus */
-      --text: #111827;    /* Gray 900 - Teks Utama (Hitam) */
-      --text-muted: #6B7280; /* Gray 500 - Teks Sekunder */
-      --danger: #EF4444;  /* Merah */
+      --bg: #F3F4F6;      /* Gray 100 */
+      --card: #FFFFFF;    /* White */
+      --border: #E5E7EB;  /* Gray 200 */
+      --text: #111827;    /* Gray 900 */
+      --text-muted: #6B7280; /* Gray 500 */
+      --danger: #EF4444;  /* Red */
       --safe-bottom: env(safe-area-inset-bottom, 20px);
       --safe-top: env(safe-area-inset-top, 10px);
       --modal-overlay-bg: rgba(0, 0, 0, 0.4);
@@ -55,9 +57,9 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: var(--bg);
       color: var(--text);
-      height: 100vh;
-      height: 100dvh;
-      overflow: hidden;
+      /* Perbaikan tinggi untuk Desktop agar fullscreen tapi tetap scrollable jika konten panjang */
+      height: 100vh; 
+      overflow: hidden; 
       display: flex;
       flex-direction: column;
     }
@@ -74,10 +76,11 @@
       flex: 1; overflow-y: auto; overflow-x: hidden;
       padding: calc(var(--safe-top) + 20px) 20px calc(90px + var(--safe-bottom)) 20px;
       display: none; opacity: 0; transition: opacity 0.2s ease;
+      position: relative;
     }
     .page.active { display: block; opacity: 1; }
 
-    .container { max-width: 600px; margin: 0 auto; position: relative; }
+    .container { max-width: 600px; margin: 0 auto; position: relative; width: 100%; }
 
     /* --- HEADER & LOGO --- */
     header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
@@ -109,6 +112,31 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
 
+    /* --- INSTALL BUTTON (Desktop UX) --- */
+    #install-container {
+      display: none; /* Hidden by default */
+      margin-bottom: 20px;
+    }
+    .install-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #10B981, #059669);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: transform 0.2s;
+    }
+    .install-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4); }
+    .install-btn:active { transform: translateY(0); }
+
     /* --- MENU GRID --- */
     .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
     
@@ -131,6 +159,7 @@
       width: 40px; height: 40px; border-radius: 11px; 
       display: flex; align-items: center; justify-content: center; font-size: 16px; 
       transition: 0.2s; color: white;
+      flex-shrink: 0;
     }
     
     /* Warna Icon Spesifik */
@@ -144,8 +173,8 @@
     .icon-box.slate { background: linear-gradient(135deg, #64748B, #475569); }
     .icon-box.green { background: linear-gradient(135deg, #10B981, #059669); }
     
-    .menu-text { display: flex; flex-direction: column; flex: 1; }
-    .menu-label { font-size: 14px; font-weight: 700; color: var(--text); }
+    .menu-text { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+    .menu-label { font-size: 14px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .menu-sub { font-size: 10px; color: var(--text-muted); margin-top: 1px; font-weight: 500; }
 
     /* --- WEBVIEW OVERLAY --- */
@@ -276,6 +305,13 @@
     .modal-btn.danger { background: var(--danger); color: white; border-color: var(--danger); }
     .modal-btn.danger:active { background: #B91C1C; }
 
+    /* --- SCROLLBAR CUSTOM (Desktop Only) --- */
+    @media (min-width: 768px) {
+      .page::-webkit-scrollbar { width: 6px; }
+      .page::-webkit-scrollbar-track { background: transparent; }
+      .page::-webkit-scrollbar-thumb { background-color: #D1D5DB; border-radius: 20px; }
+    }
+
   </style>
 </head>
 <body>
@@ -292,10 +328,17 @@
               <path d="M14 7H17V17H14V7Z" fill="#4F46E5"/>
             </svg>
           </div>
-          <div class="brand-info"><h1>Writehub</h1><p>Versi 3.80</p></div>
+          <div class="brand-info"><h1>Writehub</h1><p>Versi 3.80 Linux</p></div>
         </div>
         <div class="clock-display" id="clock">--:--</div>
       </header>
+
+      <!-- Tombol Install Otomatis (Muncul jika didukung browser) -->
+      <div id="install-container">
+        <button id="install-btn" class="install-btn">
+          <i class="fas fa-download"></i> Install ke Desktop
+        </button>
+      </div>
 
       <div class="menu-grid fade-in">
         
@@ -424,7 +467,8 @@
       </div>
     </div>
     
-    <iframe id="app-frame" class="wb-content" src="about:blank" allow="encrypted-media; fullscreen; clipboard-read; clipboard-write"></iframe>
+    <!-- allowpopups memungkinkan link membuka tab baru jika diperlukan di mode desktop -->
+    <iframe id="app-frame" class="wb-content" src="about:blank" allow="encrypted-media; fullscreen; clipboard-read; clipboard-write; allowpopups"></iframe>
   </div>
 
   <!-- CUSTOM MODAL COMPONENT -->
@@ -466,6 +510,8 @@
     const wbTitle = document.getElementById('wb-title');
     const toastEl = document.getElementById('toast');
     const modalEl = document.getElementById('custom-modal');
+    const installContainer = document.getElementById('install-container');
+    const installBtn = document.getElementById('install-btn');
     
     // Modal Elements
     const mIcon = document.getElementById('modal-icon-container');
@@ -476,6 +522,37 @@
     
     let currentUrl = '';
     let modalCallback = null;
+    let deferredPrompt; // Logic untuk PWA Install
+
+    // --- PWA INSTALLATION LOGIC ---
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // Mencegah prompt default browser
+      e.preventDefault();
+      // Simpan event untuk digunakan nanti
+      deferredPrompt = e;
+      // Tampilkan tombol install kita
+      installContainer.style.display = 'block';
+    });
+
+    installBtn.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        // Tampilkan prompt instalasi asli browser
+        deferredPrompt.prompt();
+        // Tunggu respon user
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log(`User response: ${outcome}`);
+        // Reset variabel
+        deferredPrompt = null;
+        // Sembunyikan tombol
+        installContainer.style.display = 'none';
+      }
+    });
+
+    window.addEventListener('appinstalled', () => {
+      // Sembunyikan tombol jika berhasil install
+      installContainer.style.display = 'none';
+      showToast("Terima kasih sudah menginstall!");
+    });
 
     // --- NAVIGATION LOGIC ---
     function openApp(title, url) {
@@ -682,10 +759,10 @@
       name: "Writehub",
       short_name: "Writehub",
       start_url: ".",
-      display: "standalone",
+      display: "standalone", // Ini kunci untuk fullscreen window di Linux
       background_color: "#F3F4F6",
       theme_color: "#F3F4F6",
-      description: "087538763883",
+      description: "Portal Karir & Productivity Hub",
       icons: [
         { src: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhxDrgTwXswbIeVRb-aLuMqUN_bpXt8Bj2HcT7H-6nglbYx3bOgeYEGr5I5l_Kc9BzRkVpF-1D_j7ZEnzRk_CdUTv9RlTjF1zsTW8axAOARC0lmpco6SS6yaqiwdgFA-zof5JFCQ0-LiZa28gTA9u11GodP9iSU01tLAb7YHFAQZ1UJQa0XFnwAFMXr0cte/s3264/18138.png", sizes: "192x192", type: "image/jpeg" },
         { src: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhxDrgTwXswbIeVRb-aLuMqUN_bpXt8Bj2HcT7H-6nglbYx3bOgeYEGr5I5l_Kc9BzRkVpF-1D_j7ZEnzRk_CdUTv9RlTjF1zsTW8axAOARC0lmpco6SS6yaqiwdgFA-zof5JFCQ0-LiZa28gTA9u11GodP9iSU01tLAb7YHFAQZ1UJQa0XFnwAFMXr0cte/s3264/18138.png", sizes: "512x512", type: "image/jpeg" }
